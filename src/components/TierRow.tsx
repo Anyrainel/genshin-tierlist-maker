@@ -1,0 +1,48 @@
+
+import { Character } from '../data/characters';
+import CharacterCard from './CharacterCard';
+import { cn } from '@/lib/utils';
+
+interface TierRowProps {
+  tier: string;
+  characters: Character[];
+  onDragOver: (e: React.DragEvent) => void;
+  onDrop: (e: React.DragEvent, tier: string) => void;
+  className?: string;
+}
+
+const TierRow = ({ tier, characters, onDragOver, onDrop, className }: TierRowProps) => {
+  return (
+    <div className={cn('flex w-full', className)}>
+      <div className="w-12 h-24 flex items-center justify-center font-bold text-2xl bg-gray-100">
+        {tier}
+      </div>
+      <div 
+        className="flex-grow grid grid-cols-7 gap-1 min-h-[6rem] p-2 bg-gray-50"
+        onDragOver={onDragOver}
+        onDrop={(e) => onDrop(e, tier)}
+      >
+        {/* Create a drop area for each element */}
+        {['pyro', 'hydro', 'electro', 'cryo', 'anemo', 'geo', 'dendro'].map((element) => (
+          <div 
+            key={`${tier}-${element}`}
+            className={`flex flex-wrap gap-1 p-1 min-h-[6rem] rounded-md border-2 border-dashed border-genshin-${element}/30 bg-genshin-${element}/5`}
+            data-tier={tier}
+            data-element={element}
+          >
+            {characters
+              .filter((char) => char.element === element)
+              .map((character) => (
+                <CharacterCard 
+                  key={character.id} 
+                  character={character} 
+                />
+              ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default TierRow;

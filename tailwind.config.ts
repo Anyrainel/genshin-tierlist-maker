@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,17 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Genshin Impact element colors
+				genshin: {
+					'pyro': '#de2c2c',
+					'hydro': '#2a8fbd',
+					'electro': '#b38ed5',
+					'cryo': '#98d2e6',
+					'anemo': '#4cc285',
+					'geo': '#e3b342',
+					'dendro': '#7fb92c',
+					'bg': '#f5f3e6',
 				}
 			},
 			borderRadius: {
