@@ -31,6 +31,11 @@ const TierList = ({ characters }: TierListProps) => {
     e.preventDefault();
   };
 
+  const handleDragEnd = () => {
+    // Reset dragged character when drag operation ends
+    setDraggedCharacter(null);
+  };
+
   const handleDrop = (e: React.DragEvent, tier: string) => {
     e.preventDefault();
     
@@ -57,7 +62,16 @@ const TierList = ({ characters }: TierListProps) => {
     }));
     
     toast.success(`${draggedCharacter.name} added to ${tier} tier`);
-    setDraggedCharacter(null);
+  };
+
+  // Handle removing character from a tier (returning to pool)
+  const handleRemoveFromTier = (character: Character) => {
+    setTierAssignments(prev => {
+      const newAssignments = {...prev};
+      delete newAssignments[character.id];
+      return newAssignments;
+    });
+    toast.info(`${character.name} removed from tier list`);
   };
 
   const resetTierList = () => {
@@ -76,7 +90,7 @@ const TierList = ({ characters }: TierListProps) => {
   return (
     <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto py-8">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-800">Genshin Impact Tier List Maker</h1>
+        <h1 className="text-3xl font-bold text-gray-200">Genshin Impact Tier List Maker</h1>
         <Button 
           variant="destructive" 
           onClick={resetTierList}
@@ -109,16 +123,19 @@ const TierList = ({ characters }: TierListProps) => {
             characters={getCharactersForTier(tier)}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
+            onDragStart={handleDragStart}
+            onRemoveFromTier={handleRemoveFromTier}
           />
         ))}
       </div>
       
       {/* Character Pool */}
       <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-4 text-gray-700">Characters</h2>
+        <h2 className="text-2xl font-bold mb-4 text-gray-200">Characters</h2>
         <CharacterPool 
           characters={unassignedCharacters} 
           onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
         />
       </div>
     </div>

@@ -8,17 +8,27 @@ interface TierRowProps {
   characters: Character[];
   onDragOver: (e: React.DragEvent) => void;
   onDrop: (e: React.DragEvent, tier: string) => void;
+  onDragStart: (e: React.DragEvent, character: Character) => void;
+  onRemoveFromTier: (character: Character) => void;
   className?: string;
 }
 
-const TierRow = ({ tier, characters, onDragOver, onDrop, className }: TierRowProps) => {
+const TierRow = ({ 
+  tier, 
+  characters, 
+  onDragOver, 
+  onDrop, 
+  onDragStart,
+  onRemoveFromTier,
+  className 
+}: TierRowProps) => {
   return (
     <div className={cn('flex w-full', className)}>
-      <div className="w-12 h-24 flex items-center justify-center font-bold text-2xl bg-gray-100">
+      <div className="w-12 h-24 flex items-center justify-center font-bold text-2xl bg-gray-800 text-gray-100 rounded-l-md">
         {tier}
       </div>
       <div 
-        className="flex-grow grid grid-cols-7 gap-1 min-h-[6rem] p-2 bg-gray-50"
+        className="flex-grow grid grid-cols-7 gap-1 min-h-[6rem] p-2 bg-gray-900 rounded-r-md"
         onDragOver={onDragOver}
         onDrop={(e) => onDrop(e, tier)}
       >
@@ -26,7 +36,7 @@ const TierRow = ({ tier, characters, onDragOver, onDrop, className }: TierRowPro
         {['pyro', 'hydro', 'electro', 'cryo', 'anemo', 'geo', 'dendro'].map((element) => (
           <div 
             key={`${tier}-${element}`}
-            className={`flex flex-wrap gap-1 p-1 min-h-[6rem] rounded-md border-2 border-dashed border-genshin-${element}/30 bg-genshin-${element}/5`}
+            className={`flex flex-wrap gap-1 p-1 min-h-[6rem] rounded-md border-2 border-dashed border-genshin-${element}/30 bg-gray-800/70`}
             data-tier={tier}
             data-element={element}
           >
@@ -35,7 +45,10 @@ const TierRow = ({ tier, characters, onDragOver, onDrop, className }: TierRowPro
               .map((character) => (
                 <CharacterCard 
                   key={character.id} 
-                  character={character} 
+                  character={character}
+                  draggable={true}
+                  onDragStart={(e) => onDragStart(e, character)}
+                  onDoubleClick={() => onRemoveFromTier(character)}
                 />
               ))}
           </div>
