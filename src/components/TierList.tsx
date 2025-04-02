@@ -1,161 +1,266 @@
-
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Character, tierLabels, elements, elementLabels } from '../data/characters';
 import TierRow from './TierRow';
-import CharacterPool from './CharacterPool';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { useDragAndDrop } from '../hooks/useDragAndDrop';
+import { ELEMENT_COLORS, LAYOUT } from '../constants/theme';
+import { cn } from '../lib/utils';
+import { TierAssignment, saveTierList, loadTierList } from '../data/savefile';
 
 interface TierListProps {
   characters: Character[];
 }
 
-interface TierAssignment {
-  [characterId: string]: string; // Maps character ID to tier
-}
-
 const TierList = ({ characters }: TierListProps) => {
   const [tierAssignments, setTierAssignments] = useState<TierAssignment>({});
-  const [draggedCharacter, setDraggedCharacter] = useState<Character | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleDragStart = (e: React.DragEvent, character: Character) => {
-    setDraggedCharacter(character);
-    e.dataTransfer.setData('characterId', character.id);
-    // Set the drag image to be the character image
-    const img = new Image();
-    img.src = character.imageUrl;
-    e.dataTransfer.setDragImage(img, 25, 25);
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-  };
-
-  const handleDragEnd = () => {
-    // Reset dragged character when drag operation ends
-    setDraggedCharacter(null);
-  };
-
-  const handleDrop = (e: React.DragEvent, tier: string) => {
-    e.preventDefault();
-    
-    if (!draggedCharacter) return;
-    
-    // Get the element from the drop target
-    const dropElement = (e.target as HTMLElement).closest('[data-element]')?.getAttribute('data-element');
-    
-    if (!dropElement) {
-      toast.error("Please drop on a valid element section");
-      return;
-    }
-    
-    // Check if character's element matches the drop area
-    if (draggedCharacter.element !== dropElement) {
-      toast.error(`${draggedCharacter.name} is ${elementLabels[draggedCharacter.element]}, not ${elementLabels[dropElement as any]}`);
-      return;
-    }
-    
-    // Update tier assignment
-    setTierAssignments(prev => ({
-      ...prev,
-      [draggedCharacter.id]: tier
-    }));
-    
-    toast.success(`${draggedCharacter.name} added to ${tier} tier`);
-  };
-
-  // Handle removing character from a tier (returning to pool)
-  const handleRemoveFromTier = (character: Character) => {
+  const handleTierAssignment = (draggedId: string, dropId: string | null, tier: string, direction: 'left' | 'right') => {
     setTierAssignments(prev => {
-      const newAssignments = {...prev};
-      delete newAssignments[character.id];
+      const newAssignments = { ...prev };
+      const draggedChar = characters.find(c => c.id === draggedId);
+      if (!draggedChar) return prev;
+
+      const oldAssignment = prev[draggedId];
+      const isSameTier = oldAssignment?.tier === tier;
+
+      // Get all characters in the same element and tier, sorted by position
+      const elementChars = Object.entries(prev)
+        .filter(([id, assignment]) => {
+          const char = characters.find(c => c.id === id);
+          return char?.element === draggedChar.element &&
+            assignment.tier === tier;
+        })
+        .map(([id, assignment]) => ({
+          id,
+          position: assignment.position
+        }))
+        .sort((a, b) => a.position - b.position);
+
+      // If no drop target, append to the end
+      if (!dropId) {
+        const newPosition = direction === 'left' ? 0
+          : elementChars.length > 0 ? Math.max(...elementChars.map(c => c.position)) + 1
+            : 0;
+        newAssignments[draggedId] = { tier, position: newPosition };
+
+        // If inserting at the beginning, shift all other cards right
+        if (direction === 'left') {
+          elementChars.forEach(card => {
+            newAssignments[card.id] = { tier, position: card.position + 1 };
+          });
+        }
+        return newAssignments;
+      }
+
+      // Find the drop target's current position
+      const dropTargetIndex = elementChars.findIndex(card => card.id === dropId);
+      if (dropTargetIndex === -1) return prev;
+
+      // Calculate the new position based on direction
+      const newPosition = direction === 'left'
+        ? elementChars[dropTargetIndex].position
+        : elementChars[dropTargetIndex].position + 1;
+
+      // If moving within the same tier, remove the dragged card first
+      if (isSameTier) {
+        const oldPosition = oldAssignment?.position ?? 0;
+        elementChars.forEach(card => {
+          if (card.position > oldPosition) {
+            newAssignments[card.id] = { tier, position: card.position - 1 };
+          }
+        });
+      }
+
+      // Shift positions of affected cards
+      elementChars.forEach(card => {
+        if (card.position >= newPosition) {
+          newAssignments[card.id] = { tier, position: card.position + 1 };
+        }
+      });
+
+      // Set the dragged card's new position
+      newAssignments[draggedId] = { tier, position: newPosition };
+
       return newAssignments;
     });
-    toast.info(`${character.name} removed from tier list`);
+  };
+
+  const handleRemoveFromTier = (character: Character) => {
+    setTierAssignments(prev => {
+      const newAssignments = { ...prev };
+      const oldAssignment = prev[character.id];
+
+      if (oldAssignment) {
+        // Get all characters in the same tier and element, sorted by position
+        const elementChars = Object.entries(prev)
+          .filter(([id, assignment]) => {
+            const char = characters.find(c => c.id === id);
+            return char?.element === character.element &&
+              assignment.tier === oldAssignment.tier;
+          })
+          .map(([id, assignment]) => ({
+            id,
+            position: assignment.position
+          }))
+          .sort((a, b) => a.position - b.position);
+
+        // Remove the dragged card
+        delete newAssignments[character.id];
+        toast.info(`${character.name} removed from tier list`);
+
+        // Reassign positions sequentially
+        elementChars.forEach((card, index) => {
+          if (card.id !== character.id) {
+            newAssignments[card.id] = {
+              tier: oldAssignment.tier,
+              position: index
+            };
+          }
+        });
+      }
+
+      return newAssignments;
+    });
   };
 
   const resetTierList = () => {
     setTierAssignments({});
     toast.info("Tier list has been reset");
   };
-  
-  // Filter characters based on tier assignments
-  const getCharactersForTier = (tier: string) => {
-    return characters.filter(char => tierAssignments[char.id] === tier);
-  };
-  
-  // Get unassigned characters
-  const unassignedCharacters = characters.filter(char => !tierAssignments[char.id]);
 
-  // Handle drop to character pool
-  const handleDropToPool = (e: React.DragEvent) => {
-    e.preventDefault();
-    
-    if (!draggedCharacter) return;
-    
-    // Only process if character is currently in a tier
-    if (tierAssignments[draggedCharacter.id]) {
-      setTierAssignments(prev => {
-        const newAssignments = {...prev};
-        delete newAssignments[draggedCharacter.id];
-        return newAssignments;
-      });
-      toast.info(`${draggedCharacter.name} moved back to character pool`);
+  const handleSaveTierList = () => {
+    saveTierList(tierAssignments);
+  };
+
+  const handleLoadTierList = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
     }
   };
 
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const loadedAssignments = await loadTierList(file);
+      setTierAssignments(loadedAssignments);
+    } catch (error) {
+      // Error already handled in loadTierList function
+    }
+
+    // Reset the input so the same file can be loaded again
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const {
+    handleDragStart,
+    handleDragOver,
+    handleDragEnd,
+    handleDrop,
+    handleRemoveFromTier: handleRemove,
+    hoveredCardId,
+    hoverDirection
+  } = useDragAndDrop({
+    onTierAssignment: handleTierAssignment,
+    onRemoveFromTier: handleRemoveFromTier
+  });
+
+  const getCharactersForTier = (tier: string) => {
+    return characters
+      .filter(char => tierAssignments[char.id]?.tier === tier)
+      .sort((a, b) => {
+        const posA = tierAssignments[a.id]?.position ?? 0;
+        const posB = tierAssignments[b.id]?.position ?? 0;
+        return posA - posB;
+      });
+  };
+
+  const poolCharacters = characters.filter(char => !tierAssignments[char.id]);
+
+  const allTiers = [...tierLabels, 'Pool'];
+
   return (
-    <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto py-8">
-      <div className="flex justify-between items-center">
+    <div className="flex flex-col w-full max-w-[90vw] mx-auto py-8 px-4">
+      <div className="flex justify-between items-center mb-4">
         <h1 className="text-3xl font-bold text-gray-200">Genshin Impact Tier List Maker</h1>
-        <Button 
-          variant="destructive" 
-          onClick={resetTierList}
-        >
-          Reset Tier List
-        </Button>
-      </div>
-      
-      {/* Element Headers */}
-      <div className="flex w-full">
-        <div className="w-12"></div> {/* Empty space for tier label */}
-        <div className="flex-grow grid grid-cols-7 gap-1">
-          {elements.map(element => (
-            <div 
-              key={element} 
-              className={`p-2 text-center font-bold text-white bg-genshin-${element} rounded-t-md`}
-            >
-              {elementLabels[element]}
-            </div>
-          ))}
+        <div className="flex gap-2">
+          <Button
+            variant="default"
+            onClick={handleSaveTierList}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white"
+          >
+            Save
+          </Button>
+          <Button
+            variant="default"
+            onClick={handleLoadTierList}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Load
+          </Button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            accept=".json"
+            className="hidden"
+          />
+          <Button
+            variant="destructive"
+            onClick={resetTierList}
+          >
+            Reset Tier List
+          </Button>
         </div>
       </div>
       
-      {/* Tier Rows */}
-      <div className="flex flex-col gap-2">
-        {tierLabels.map(tier => (
-          <TierRow
-            key={tier}
-            tier={tier}
-            characters={getCharactersForTier(tier)}
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
-            onDragStart={handleDragStart}
-            onRemoveFromTier={handleRemoveFromTier}
-          />
-        ))}
-      </div>
-      
-      {/* Character Pool */}
-      <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-4 text-gray-200">Characters</h2>
-        <CharacterPool 
-          characters={unassignedCharacters} 
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
-          onDragOver={handleDragOver}
-          onDrop={handleDropToPool}
-        />
+      <div className="relative">
+        <div className="flex w-full border-b border-gray-700">
+          <div className="w-16"></div>
+          <div className={cn(
+            "flex-grow grid",
+            LAYOUT.GRID_COLUMNS,
+            "gap-0"
+          )}>
+            {elements.map((element, index) => (
+              <div
+                key={element} 
+                className={cn(
+                  "p-2 text-center font-bold text-white",
+                  ELEMENT_COLORS[element],
+                  "rounded-tl-md rounded-tr-md",
+                  "border-r border-gray-700 last:border-r-0"
+                )}
+              >
+                {elementLabels[element]}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="border-r border-b border-gray-700">
+          <div className="flex flex-col">
+            {allTiers.map(tier => (
+              <TierRow
+                key={tier}
+                tier={tier}
+                characters={tier === 'Pool' ? poolCharacters : getCharactersForTier(tier)}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+                onDragStart={handleDragStart}
+                onRemoveFromTier={handleRemove}
+                className={tier === 'Pool' ? 'bg-gray-800/50' : undefined}
+                hoveredCardId={hoveredCardId}
+                hoverDirection={hoverDirection}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

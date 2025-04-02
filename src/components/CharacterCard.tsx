@@ -1,12 +1,13 @@
-
 import { Character } from '../data/characters';
 import { cn } from '@/lib/utils';
+import { RARITY_COLORS, LAYOUT } from '../constants/theme';
 
 interface CharacterCardProps {
   character: Character;
   isDragging?: boolean;
   draggable?: boolean;
   className?: string;
+  hoverDirection?: 'left' | 'right' | null;
   onDragStart?: (e: React.DragEvent) => void;
   onDragEnd?: () => void;
   onDoubleClick?: () => void;
@@ -17,36 +18,32 @@ const CharacterCard = ({
   isDragging, 
   draggable = false, 
   className,
+  hoverDirection = null,
   onDragStart,
   onDragEnd,
   onDoubleClick
 }: CharacterCardProps) => {
-  const elementColors = {
-    pyro: 'border-genshin-pyro/70',
-    hydro: 'border-genshin-hydro/70',
-    electro: 'border-genshin-electro/70',
-    cryo: 'border-genshin-cryo/70',
-    anemo: 'border-genshin-anemo/70',
-    geo: 'border-genshin-geo/70',
-    dendro: 'border-genshin-dendro/70'
-  };
+  const offset = hoverDirection === 'left' ? 3 : hoverDirection === 'right' ? -3 : 0;
 
   return (
     <div
       className={cn(
-        'w-16 h-16 rounded-md overflow-hidden transition-all border-2 shadow-lg hover:scale-105',
-        elementColors[character.element],
+        LAYOUT.CHARACTER_CARD_SIZE,
+        'rounded-md overflow-hidden transition-all',
+        RARITY_COLORS[character.rarity],
         draggable ? 'cursor-grab active:cursor-grabbing' : '',
         isDragging ? 'scale-105 opacity-50' : '',
-        'hover:shadow-[0_0_8px_rgba(255,255,255,0.3)]',
+        'hover:scale-105',
         className
       )}
+      style={{
+        transform: `translate(${offset}px, 0) ${isDragging ? 'scale(1.05)' : ''}`
+      }}
       draggable={draggable}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
       onDoubleClick={onDoubleClick}
       data-character-id={character.id}
-      data-element={character.element}
       title={`${character.name} (Double-click to remove)`}
     >
       <img
@@ -54,6 +51,7 @@ const CharacterCard = ({
         alt={character.name}
         title={character.name}
         className="w-full h-full object-cover"
+        loading="lazy"
       />
     </div>
   );

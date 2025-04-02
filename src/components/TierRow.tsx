@@ -1,7 +1,8 @@
-
 import { Character } from '../data/characters';
 import CharacterCard from './CharacterCard';
 import { cn } from '@/lib/utils';
+import { TIER_COLORS, TIER_BG_COLORS, LAYOUT, ELEMENT_COLORS } from '../constants/theme';
+import { elements } from '../data/characters';
 
 interface TierRowProps {
   tier: string;
@@ -11,6 +12,8 @@ interface TierRowProps {
   onDragStart: (e: React.DragEvent, character: Character) => void;
   onRemoveFromTier: (character: Character) => void;
   className?: string;
+  hoveredCardId?: string | null;
+  hoverDirection?: 'left' | 'right' | null;
 }
 
 const TierRow = ({ 
@@ -20,53 +23,56 @@ const TierRow = ({
   onDrop, 
   onDragStart,
   onRemoveFromTier,
-  className 
+  className,
+  hoveredCardId = null,
+  hoverDirection = null
 }: TierRowProps) => {
-  // Get background color based on tier
-  const getTierColor = () => {
-    switch(tier) {
-      case 'S': return 'bg-red-700/80';
-      case 'A': return 'bg-orange-600/80';
-      case 'B': return 'bg-yellow-600/80';
-      case 'C': return 'bg-green-700/80';
-      case 'D': return 'bg-blue-700/80';
-      default: return 'bg-gray-800/80';
-    }
-  };
-
   return (
-    <div className={cn('flex w-full', className)}>
-      {/* Fixed width tier label with exact same height as grid cells */}
-      <div className={`min-w-[3rem] w-12 flex-shrink-0 flex items-center justify-center font-bold text-2xl ${getTierColor()} text-gray-100 rounded-l-md shadow-md h-full`}>
+    <div className={cn('grid grid-cols-[4rem_1fr] gap-0 border-b border-gray-700 last:border-b-0', LAYOUT.MIN_ROW_HEIGHT, className)}>
+      <div className={cn(
+        'flex items-center justify-center font-bold text-2xl',
+        TIER_COLORS[tier as keyof typeof TIER_COLORS],
+        'text-gray-100 rounded-l-md border-r border-gray-700'
+      )}>
         {tier}
       </div>
-      
-      {/* Grid container with fixed column widths */}
+
       <div 
-        className="flex-grow grid grid-cols-7 gap-1 min-h-[6rem] p-2 bg-gray-800/30 rounded-r-md shadow-md"
+        className={cn(
+          "grid bg-gray-800/30",
+          LAYOUT.GRID_COLUMNS,
+          "gap-0"
+        )}
         onDragOver={onDragOver}
         onDrop={(e) => onDrop(e, tier)}
-        style={{ gridTemplateColumns: 'repeat(7, 1fr)' }}
       >
-        {/* Create a drop area for each element */}
-        {['pyro', 'hydro', 'electro', 'cryo', 'anemo', 'geo', 'dendro'].map((element) => (
+        {elements.map((element) => (
           <div 
             key={`${tier}-${element}`}
-            className="flex flex-wrap gap-1 p-1 min-h-[6rem] rounded-md border border-genshin-${element}/30 bg-gray-800/50 backdrop-blur-sm transition-all hover:bg-gray-700/40 overflow-hidden"
+            className={cn(
+              "flex flex-col gap-2 p-2 w-full",
+              TIER_BG_COLORS[tier as keyof typeof TIER_BG_COLORS],
+              "backdrop-blur-sm",
+              "border-r border-gray-700 last:border-r-0",
+              "hover:bg-opacity-80"
+            )}
             data-tier={tier}
             data-element={element}
           >
-            {characters
-              .filter((char) => char.element === element)
-              .map((character) => (
-                <CharacterCard 
-                  key={character.id} 
-                  character={character}
-                  draggable={true}
-                  onDragStart={(e) => onDragStart(e, character)}
-                  onDoubleClick={() => onRemoveFromTier(character)}
-                />
-              ))}
+            <div className="flex flex-wrap justify-center gap-2">
+              {characters
+                .filter((char) => char.element === element)
+                .map((character) => (
+                  <CharacterCard
+                    key={character.id}
+                    character={character}
+                    draggable={true}
+                    hoverDirection={hoveredCardId === character.id ? hoverDirection : null}
+                    onDragStart={(e) => onDragStart(e, character)}
+                    onDoubleClick={() => onRemoveFromTier(character)}
+                  />
+                ))}
+            </div>
           </div>
         ))}
       </div>
