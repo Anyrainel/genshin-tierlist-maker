@@ -87,6 +87,23 @@ const TierList = ({ characters }: TierListProps) => {
   // Get unassigned characters
   const unassignedCharacters = characters.filter(char => !tierAssignments[char.id]);
 
+  // Handle drop to character pool
+  const handleDropToPool = (e: React.DragEvent) => {
+    e.preventDefault();
+    
+    if (!draggedCharacter) return;
+    
+    // Only process if character is currently in a tier
+    if (tierAssignments[draggedCharacter.id]) {
+      setTierAssignments(prev => {
+        const newAssignments = {...prev};
+        delete newAssignments[draggedCharacter.id];
+        return newAssignments;
+      });
+      toast.info(`${draggedCharacter.name} moved back to character pool`);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto py-8">
       <div className="flex justify-between items-center">
@@ -136,6 +153,8 @@ const TierList = ({ characters }: TierListProps) => {
           characters={unassignedCharacters} 
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
+          onDragOver={handleDragOver}
+          onDrop={handleDropToPool}
         />
       </div>
     </div>

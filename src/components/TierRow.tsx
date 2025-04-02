@@ -22,13 +22,25 @@ const TierRow = ({
   onRemoveFromTier,
   className 
 }: TierRowProps) => {
+  // Get background color based on tier
+  const getTierColor = () => {
+    switch(tier) {
+      case 'S': return 'bg-red-700/80';
+      case 'A': return 'bg-orange-600/80';
+      case 'B': return 'bg-yellow-600/80';
+      case 'C': return 'bg-green-700/80';
+      case 'D': return 'bg-blue-700/80';
+      default: return 'bg-gray-800/80';
+    }
+  };
+
   return (
     <div className={cn('flex w-full', className)}>
-      <div className="w-12 h-24 flex items-center justify-center font-bold text-2xl bg-gray-800 text-gray-100 rounded-l-md">
+      <div className={`w-12 h-24 flex items-center justify-center font-bold text-2xl ${getTierColor()} text-gray-100 rounded-l-md shadow-md`}>
         {tier}
       </div>
       <div 
-        className="flex-grow grid grid-cols-7 gap-1 min-h-[6rem] p-2 bg-gray-900 rounded-r-md"
+        className="flex-grow grid grid-cols-7 gap-1 min-h-[6rem] p-2 bg-gray-800/30 rounded-r-md shadow-md"
         onDragOver={onDragOver}
         onDrop={(e) => onDrop(e, tier)}
       >
@@ -36,7 +48,7 @@ const TierRow = ({
         {['pyro', 'hydro', 'electro', 'cryo', 'anemo', 'geo', 'dendro'].map((element) => (
           <div 
             key={`${tier}-${element}`}
-            className={`flex flex-wrap gap-1 p-1 min-h-[6rem] rounded-md border-2 border-dashed border-genshin-${element}/30 bg-gray-800/70`}
+            className={`flex flex-wrap gap-1 p-1 min-h-[6rem] rounded-md border border-genshin-${element}/30 bg-gray-800/50 backdrop-blur-sm transition-all hover:bg-gray-700/40`}
             data-tier={tier}
             data-element={element}
           >
