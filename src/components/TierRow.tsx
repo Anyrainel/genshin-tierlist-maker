@@ -35,20 +35,24 @@ const TierRow = ({
   };
 
   return (
-    <div className={cn('flex w-full', className)}>
-      <div className={`w-12 h-24 flex items-center justify-center font-bold text-2xl ${getTierColor()} text-gray-100 rounded-l-md shadow-md`}>
+    <div className={cn('flex w-full h-auto', className)}>
+      {/* Fixed width tier label that stays vertically centered */}
+      <div className={`min-w-[3rem] w-12 flex-shrink-0 flex items-center justify-center font-bold text-2xl ${getTierColor()} text-gray-100 rounded-l-md shadow-md`}>
         {tier}
       </div>
+      
+      {/* Grid container with fixed column widths */}
       <div 
         className="flex-grow grid grid-cols-7 gap-1 min-h-[6rem] p-2 bg-gray-800/30 rounded-r-md shadow-md"
         onDragOver={onDragOver}
         onDrop={(e) => onDrop(e, tier)}
+        style={{ gridTemplateColumns: 'repeat(7, 1fr)' }}
       >
         {/* Create a drop area for each element */}
         {['pyro', 'hydro', 'electro', 'cryo', 'anemo', 'geo', 'dendro'].map((element) => (
           <div 
             key={`${tier}-${element}`}
-            className={`flex flex-wrap gap-1 p-1 min-h-[6rem] rounded-md border border-genshin-${element}/30 bg-gray-800/50 backdrop-blur-sm transition-all hover:bg-gray-700/40`}
+            className="flex flex-wrap gap-1 p-1 min-h-[6rem] rounded-md border border-genshin-${element}/30 bg-gray-800/50 backdrop-blur-sm transition-all hover:bg-gray-700/40 overflow-hidden"
             data-tier={tier}
             data-element={element}
           >
