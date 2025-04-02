@@ -35,9 +35,9 @@ const TierRow = ({
   };
 
   return (
-    <div className={cn('flex w-full h-auto', className)}>
-      {/* Fixed width tier label that stays vertically centered */}
-      <div className={`min-w-[3rem] w-12 flex-shrink-0 flex items-center justify-center font-bold text-2xl ${getTierColor()} text-gray-100 rounded-l-md shadow-md`}>
+    <div className={cn('flex w-full', className)}>
+      {/* Fixed width tier label with exact same height as grid cells */}
+      <div className={`min-w-[3rem] w-12 flex-shrink-0 flex items-center justify-center font-bold text-2xl ${getTierColor()} text-gray-100 rounded-l-md shadow-md h-full`}>
         {tier}
       </div>
       
