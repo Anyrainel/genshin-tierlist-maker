@@ -1,4 +1,4 @@
-import { Character } from '../data/characters';
+import { Character } from '../data/types';
 import { cn } from '@/lib/utils';
 import { RARITY_COLORS, LAYOUT } from '../constants/theme';
 
@@ -43,7 +43,7 @@ const CharacterCard = ({
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
       onDoubleClick={onDoubleClick}
-      data-character-id={character.id}
+      data-character-id={character.name}
       title={`${character.name} (Double-click to remove)`}
     >
       <img

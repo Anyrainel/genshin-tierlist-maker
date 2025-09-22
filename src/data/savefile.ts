@@ -1,7 +1,7 @@
 import { toast } from 'sonner';
 
 export interface TierAssignment {
-    [characterId: string]: {
+    [characterName: string]: {
         tier: string;
         position: number;
     };

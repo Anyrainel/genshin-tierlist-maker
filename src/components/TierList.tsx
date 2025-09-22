@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
-import { Character, tierLabels, elements, elementLabels } from '../data/characters';
+import { Character, tiers, elements } from '../data/types';
+import { elementImages } from '../data/elements';
 import TierRow from './TierRow';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -19,7 +20,7 @@ const TierList = ({ characters }: TierListProps) => {
   const handleTierAssignment = (draggedId: string, dropId: string | null, tier: string, direction: 'left' | 'right') => {
     setTierAssignments(prev => {
       const newAssignments = { ...prev };
-      const draggedChar = characters.find(c => c.id === draggedId);
+      const draggedChar = characters.find(c => c.name === draggedId);
       if (!draggedChar) return prev;
 
       const oldAssignment = prev[draggedId];
@@ -28,12 +29,12 @@ const TierList = ({ characters }: TierListProps) => {
       // Get all characters in the same element and tier, sorted by position
       const elementChars = Object.entries(prev)
         .filter(([id, assignment]) => {
-          const char = characters.find(c => c.id === id);
+          const char = characters.find(c => c.name === id);
           return char?.element === draggedChar.element &&
             assignment.tier === tier;
         })
-        .map(([id, assignment]) => ({
-          id,
+        .map(([name, assignment]) => ({
+          name,
           position: assignment.position
         }))
         .sort((a, b) => a.position - b.position);
@@ -48,14 +49,14 @@ const TierList = ({ characters }: TierListProps) => {
         // If inserting at the beginning, shift all other cards right
         if (direction === 'left') {
           elementChars.forEach(card => {
-            newAssignments[card.id] = { tier, position: card.position + 1 };
+            newAssignments[card.name] = { tier, position: card.position + 1 };
           });
         }
         return newAssignments;
       }
 
       // Find the drop target's current position
-      const dropTargetIndex = elementChars.findIndex(card => card.id === dropId);
+      const dropTargetIndex = elementChars.findIndex(card => card.name === dropId);
       if (dropTargetIndex === -1) return prev;
 
       // Calculate the new position based on direction
@@ -68,7 +69,7 @@ const TierList = ({ characters }: TierListProps) => {
         const oldPosition = oldAssignment?.position ?? 0;
         elementChars.forEach(card => {
           if (card.position > oldPosition) {
-            newAssignments[card.id] = { tier, position: card.position - 1 };
+            newAssignments[card.name] = { tier, position: card.position - 1 };
           }
         });
       }
@@ -76,7 +77,7 @@ const TierList = ({ characters }: TierListProps) => {
       // Shift positions of affected cards
       elementChars.forEach(card => {
         if (card.position >= newPosition) {
-          newAssignments[card.id] = { tier, position: card.position + 1 };
+          newAssignments[card.name] = { tier, position: card.position + 1 };
         }
       });
 
@@ -90,30 +91,30 @@ const TierList = ({ characters }: TierListProps) => {
   const handleRemoveFromTier = (character: Character) => {
     setTierAssignments(prev => {
       const newAssignments = { ...prev };
-      const oldAssignment = prev[character.id];
+      const oldAssignment = prev[character.name];
 
       if (oldAssignment) {
         // Get all characters in the same tier and element, sorted by position
         const elementChars = Object.entries(prev)
-          .filter(([id, assignment]) => {
-            const char = characters.find(c => c.id === id);
+          .filter(([name, assignment]) => {
+            const char = characters.find(c => c.name === name);
             return char?.element === character.element &&
               assignment.tier === oldAssignment.tier;
           })
-          .map(([id, assignment]) => ({
-            id,
+          .map(([name, assignment]) => ({
+            name,
             position: assignment.position
           }))
           .sort((a, b) => a.position - b.position);
 
         // Remove the dragged card
-        delete newAssignments[character.id];
-        toast.info(`${character.name} removed from tier list`);
+        delete newAssignments[character.name];
+        // toast.info(`${character.name} removed from tier list`);
 
         // Reassign positions sequentially
         elementChars.forEach((card, index) => {
-          if (card.id !== character.id) {
-            newAssignments[card.id] = {
+          if (card.name !== character.name) {
+            newAssignments[card.name] = {
               tier: oldAssignment.tier,
               position: index
             };
@@ -172,17 +173,17 @@ const TierList = ({ characters }: TierListProps) => {
 
   const getCharactersForTier = (tier: string) => {
     return characters
-      .filter(char => tierAssignments[char.id]?.tier === tier)
+      .filter(char => tierAssignments[char.name]?.tier === tier)
       .sort((a, b) => {
-        const posA = tierAssignments[a.id]?.position ?? 0;
-        const posB = tierAssignments[b.id]?.position ?? 0;
+        const posA = tierAssignments[a.name]?.position ?? 0;
+        const posB = tierAssignments[b.name]?.position ?? 0;
         return posA - posB;
       });
   };
 
-  const poolCharacters = characters.filter(char => !tierAssignments[char.id]);
+  const poolCharacters = characters.filter(char => !tierAssignments[char.name]);
 
-  const allTiers = [...tierLabels, 'Pool'];
+  const allTiers = [...tiers, 'Pool'];
 
   return (
     <div className="flex flex-col w-full max-w-[90vw] mx-auto py-8 px-4">
@@ -234,10 +235,16 @@ const TierList = ({ characters }: TierListProps) => {
                   "p-2 text-center font-bold text-white",
                   ELEMENT_COLORS[element],
                   "rounded-tl-md rounded-tr-md",
-                  "border-r border-gray-700 last:border-r-0"
+                  "border-r border-gray-700 last:border-r-0",
+                  "flex items-center justify-center gap-2"
                 )}
               >
-                {elementLabels[element]}
+                <img
+                  src={elementImages[element]}
+                  alt={`${element} element`}
+                  className="w-6 h-6 drop-shadow-lg filter brightness-110 contrast-125"
+                />
+                {element}
               </div>
             ))}
           </div>

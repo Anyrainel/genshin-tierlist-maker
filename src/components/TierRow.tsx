@@ -1,8 +1,8 @@
-import { Character } from '../data/characters';
+import { Character } from '../data/types';
 import CharacterCard from './CharacterCard';
 import { cn } from '@/lib/utils';
 import { TIER_COLORS, TIER_BG_COLORS, LAYOUT, ELEMENT_COLORS } from '../constants/theme';
-import { elements } from '../data/characters';
+import { elements } from '../data/types';
 
 interface TierRowProps {
   tier: string;
@@ -64,10 +64,10 @@ const TierRow = ({
                 .filter((char) => char.element === element)
                 .map((character) => (
                   <CharacterCard
-                    key={character.id}
+                    key={character.name}
                     character={character}
                     draggable={true}
-                    hoverDirection={hoveredCardId === character.id ? hoverDirection : null}
+                    hoverDirection={hoveredCardId === character.name ? hoverDirection : null}
                     onDragStart={(e) => onDragStart(e, character)}
                     onDoubleClick={() => onRemoveFromTier(character)}
                   />

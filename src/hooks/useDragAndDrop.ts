@@ -1,9 +1,6 @@
 import { useState } from 'react';
-import { Character } from '../data/characters';
-import { toast } from 'sonner';
-import { elementLabels } from '../data/characters';
+import { Character } from '../data/types';
 import { RARITY_COLORS } from '../constants/theme';
-import CharacterCard from '../components/CharacterCard';
 
 interface UseDragAndDropProps {
     onTierAssignment: (draggedId: string, dropId: string | null, tier: string, direction: 'left' | 'right') => void;
@@ -112,7 +109,7 @@ export const useDragAndDrop = ({ onTierAssignment, onRemoveFromTier }: UseDragAn
             if (dropPoint.x >= adjustedRect.left && dropPoint.x <= adjustedRect.right &&
                 dropPoint.y >= adjustedRect.top && dropPoint.y <= adjustedRect.bottom) {
                 // If we're over the dragged card itself, return all nulls
-                if (cardId === draggedCharacter.id) {
+                if (cardId === draggedCharacter.name) {
                     return { element: null, tier: null, position: null, cardId: null, direction: null };
                 }
                 // We're directly over this card, determine left/right direction
@@ -161,7 +158,7 @@ export const useDragAndDrop = ({ onTierAssignment, onRemoveFromTier }: UseDragAn
             }
         }
 
-        if (!nearestCard || nearestCard.cardId === draggedCharacter.id) {
+        if (!nearestCard || nearestCard.cardId === draggedCharacter.name) {
             return { element: null, tier: null, position: null, cardId: null, direction: null };
         }
 
@@ -175,7 +172,7 @@ export const useDragAndDrop = ({ onTierAssignment, onRemoveFromTier }: UseDragAn
 
     const handleDragStart = (e: React.DragEvent, character: Character) => {
         setDraggedCharacter(character);
-        e.dataTransfer.setData('characterId', character.id);
+        e.dataTransfer.setData('characterId', character.name);
 
         // Create a drag preview that matches the CharacterCard component
         const dragPreview = document.createElement('div');
@@ -249,26 +246,26 @@ export const useDragAndDrop = ({ onTierAssignment, onRemoveFromTier }: UseDragAn
 
         // Handle different drop positions
         if (dropPos.position === 'first') {
-            onTierAssignment(draggedCharacter.id, null, dropPos.tier, 'left');
-            toast.success(`${draggedCharacter.name} moved to ${dropPos.tier} tier first`);
+            onTierAssignment(draggedCharacter.name, null, dropPos.tier, 'left');
+            // toast.success(`${draggedCharacter.name} moved to ${dropPos.tier} tier first`);
             return;
         }
 
         if (dropPos.position === 'last') {
-            onTierAssignment(draggedCharacter.id, null, dropPos.tier, 'right');
-            toast.success(`${draggedCharacter.name} moved to ${dropPos.tier} tier last`);
+            onTierAssignment(draggedCharacter.name, null, dropPos.tier, 'right');
+            // toast.success(`${draggedCharacter.name} moved to ${dropPos.tier} tier last`);
             return;
         }
 
         if (dropPos.position === 'only') {
-            onTierAssignment(draggedCharacter.id, null, dropPos.tier, 'left');
-            toast.success(`${draggedCharacter.name} moved to ${dropPos.tier} tier only`);
+            onTierAssignment(draggedCharacter.name, null, dropPos.tier, 'left');
+            // toast.success(`${draggedCharacter.name} moved to ${dropPos.tier} tier only`);
             return;
         }
 
         if (dropPos.cardId && dropPos.direction) {
-            onTierAssignment(draggedCharacter.id, dropPos.cardId, dropPos.tier, dropPos.direction);
-            toast.success(`${draggedCharacter.name} moved to ${dropPos.tier} tier, ${dropPos.cardId}'s ${dropPos.direction}`);
+            onTierAssignment(draggedCharacter.name, dropPos.cardId, dropPos.tier, dropPos.direction);
+            // toast.success(`${draggedCharacter.name} moved to ${dropPos.tier} tier, ${dropPos.cardId}'s ${dropPos.direction}`);
         }
     };
 
