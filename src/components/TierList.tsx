@@ -1,25 +1,33 @@
 import { useState, useRef, useMemo } from 'react';
-import { Character, tiers } from '../data/types';
+import { Character, tiers, TierCustomization, TierAssignment, TierListData } from '../data/types';
 import { characters } from '../data/characters';
 import TierGrid from './TierGrid';
+import TierCustomizationDialog from './TierCustomizationDialog';
+import ResetConfirmDialog from './ResetConfirmDialog';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { useDragAndDrop } from '../hooks/useDragAndDrop';
-import { TierAssignment, saveTierList, loadTierList } from '../data/savefile';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useWeaponVisibility } from '../contexts/WeaponVisibilityContext';
 
 const TierList = () => {
   const [tierAssignments, setTierAssignments] = useState<TierAssignment>({});
+  const [tierCustomization, setTierCustomization] = useState<TierCustomization>({});
+  const [isCustomizeDialogOpen, setIsCustomizeDialogOpen] = useState(false);
+  const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { language, setLanguage, t } = useLanguage();
   const { showWeapons, setShowWeapons } = useWeaponVisibility();
-  const allTiers = [...tiers, 'Pool'];
+
+  // Filter out hidden tiers from allTiers
+  const allTiers = useMemo(() => {
+    return [...tiers, 'Pool'].filter(tier => !tierCustomization[tier]?.hidden);
+  }, [tierCustomization]);
 
   const createCharactersPerTierMap = (): { [tier: string]: Character[] } => {
     const charactersPerTier: { [tier: string]: Character[] } = {};
 
-    // Initialize all tiers with empty arrays
+    // Initialize all visible tiers with empty arrays
     allTiers.forEach(tier => {
       charactersPerTier[tier] = [];
     });
@@ -28,8 +36,13 @@ const TierList = () => {
     characters.forEach(character => {
       const assignment = tierAssignments[character.name];
       if (assignment) {
-        // Character is assigned to a tier
-        charactersPerTier[assignment.tier].push(character);
+        // Character is assigned to a tier - only add if tier is visible
+        if (!tierCustomization[assignment.tier]?.hidden) {
+          charactersPerTier[assignment.tier].push(character);
+        } else {
+          // If tier is hidden, move character back to pool
+          charactersPerTier['Pool'].push(character);
+        }
       } else {
         // Character is in the pool
         charactersPerTier['Pool'].push(character);
@@ -39,8 +52,10 @@ const TierList = () => {
     // Sort characters within each tier by position
     allTiers.forEach(tier => {
       charactersPerTier[tier].sort((a, b) => {
-        const posA = tierAssignments[a.name]?.position ?? 0;
-        const posB = tierAssignments[b.name]?.position ?? 0;
+        const assignmentA = tierAssignments[a.name];
+        const assignmentB = tierAssignments[b.name];
+        const posA = assignmentA?.position ?? 0;
+        const posB = assignmentB?.position ?? 0;
         return posA - posB;
       });
     });
@@ -48,7 +63,7 @@ const TierList = () => {
     return charactersPerTier;
   };
 
-  const charactersPerTier = useMemo(() => createCharactersPerTierMap(), [tierAssignments]);
+  const charactersPerTier = useMemo(() => createCharactersPerTierMap(), [tierAssignments, tierCustomization, allTiers]);
 
   const handleTierAssignment = (dragName: string, dropName: string | null, tier: string, direction: 'left' | 'right') => {
     setTierAssignments(prev => {
@@ -61,12 +76,12 @@ const TierList = () => {
 
       // Get all characters in the same element and tier, sorted by position
       const elementChars = Object.entries(prev)
-        .filter(([id, assignment]) => {
+        .filter(([id, assignment]: [string, { tier: string; position: number }]) => {
           const char = characters.find(c => c.name === id);
           return char?.element === draggedChar.element &&
             assignment.tier === tier;
         })
-        .map(([name, assignment]) => ({
+        .map(([name, assignment]: [string, { tier: string; position: number }]) => ({
           name,
           position: assignment.position
         }))
@@ -131,12 +146,12 @@ const TierList = () => {
       if (oldAssignment) {
         // Get all characters in the same tier and element, sorted by position
         const elementChars = Object.entries(prev)
-          .filter(([name, assignment]) => {
+          .filter(([name, assignment]: [string, { tier: string; position: number }]) => {
             const char = characters.find(c => c.name === name);
             return char?.element === character.element &&
               assignment.tier === oldAssignment.tier;
           })
-          .map(([name, assignment]) => ({
+          .map(([name, assignment]: [string, { tier: string; position: number }]) => ({
             name,
             position: assignment.position
           }))
@@ -166,8 +181,81 @@ const TierList = () => {
     toast.info(t.messages.tierListReset);
   };
 
+  const handleResetConfirm = () => {
+    resetTierList();
+    setIsResetConfirmOpen(false);
+  };
+
+  const handleTierCustomizationSave = (customization: TierCustomization) => {
+    // Remove characters from hidden tiers
+    const newAssignments = { ...tierAssignments };
+    const hiddenTiers = Object.keys(customization).filter(tier => customization[tier]?.hidden);
+
+    hiddenTiers.forEach(tier => {
+      Object.keys(newAssignments).forEach(characterName => {
+        if (newAssignments[characterName].tier === tier) {
+          delete newAssignments[characterName];
+        }
+      });
+    });
+
+    setTierAssignments(newAssignments);
+    setTierCustomization(customization);
+  };
+
+  const saveTierList = (data: TierListData): void => {
+    try {
+      const dataStr = JSON.stringify(data, null, 2);
+      const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+
+      const exportFileDefaultName = `genshin-tier-list-${new Date().toISOString().slice(0, 10)}.json`;
+
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileDefaultName);
+      linkElement.click();
+
+      toast.success(t.messages.tierListSaved);
+    } catch (error) {
+      console.error('Error saving tier list:', error);
+      toast.error(t.messages.tierListSaveFailed);
+    }
+  };
+
+  const loadTierList = (file: File): Promise<TierListData> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        try {
+          const content = e.target?.result as string;
+          const parsedData = JSON.parse(content) as TierListData;
+
+          toast.success(t.messages.tierListLoaded);
+          resolve(parsedData);
+        } catch (error) {
+          console.error('Error loading tier list:', error);
+          toast.error(t.messages.tierListLoadFailed);
+          reject(error);
+        }
+      };
+
+      reader.onerror = () => {
+        toast.error(t.messages.fileReadError);
+        reject(new Error('Error reading file'));
+      };
+
+      reader.readAsText(file);
+    });
+  };
+
   const handleSaveTierList = () => {
-    saveTierList(tierAssignments, language);
+    const data: TierListData = {
+      tierAssignments,
+      tierCustomization,
+      language
+    };
+    saveTierList(data);
   };
 
   const handleLoadTierList = () => {
@@ -181,8 +269,13 @@ const TierList = () => {
     if (!file) return;
 
     try {
-      const loadedAssignments = await loadTierList(file, language);
-      setTierAssignments(loadedAssignments);
+      const loadedData = await loadTierList(file);
+      setTierAssignments(loadedData.tierAssignments);
+      setTierCustomization(loadedData.tierCustomization);
+      // Update language if it was different in the loaded file
+      if (loadedData.language !== language) {
+        setLanguage(loadedData.language);
+      }
     } catch (error) {
       // Error already handled in loadTierList function
     }
@@ -231,17 +324,31 @@ const TierList = () => {
         <div className="flex gap-2">
           <Button
             variant="default"
+            onClick={() => setIsCustomizeDialogOpen(true)}
+            className="bg-yellow-600 hover:bg-yellow-700 text-md"
+          >
+            {t.buttons.customize}
+          </Button>
+          <Button
+            variant="default"
             onClick={handleSaveTierList}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white"
+            className="bg-emerald-600 hover:bg-emerald-700 text-md"
           >
             {t.buttons.save}
           </Button>
           <Button
             variant="default"
             onClick={handleLoadTierList}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-blue-600 hover:bg-blue-700 text-md"
           >
             {t.buttons.load}
+          </Button>
+          <Button
+            variant="default"
+            onClick={() => setIsResetConfirmOpen(true)}
+            className="bg-red-600 hover:bg-red-700 text-md"
+          >
+            {t.buttons.reset}
           </Button>
           <input
             type="file"
@@ -250,18 +357,13 @@ const TierList = () => {
             accept=".json"
             className="hidden"
           />
-          <Button
-            variant="destructive"
-            onClick={resetTierList}
-          >
-            {t.buttons.reset}
-          </Button>
         </div>
       </div>
       
       <TierGrid
         allTiers={allTiers}
         charactersPerTier={charactersPerTier}
+        tierCustomization={tierCustomization}
         onDragStart={handleDragStart}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
@@ -269,6 +371,19 @@ const TierList = () => {
         onRemoveFromTiers={handleRemoveFromTiers}
         hoveredCardName={hoveredCardName}
         hoverDirection={hoverDirection}
+      />
+
+      <TierCustomizationDialog
+        isOpen={isCustomizeDialogOpen}
+        onClose={() => setIsCustomizeDialogOpen(false)}
+        onSave={handleTierCustomizationSave}
+        initialCustomization={tierCustomization}
+      />
+
+      <ResetConfirmDialog
+        isOpen={isResetConfirmOpen}
+        onClose={() => setIsResetConfirmOpen(false)}
+        onConfirm={handleResetConfirm}
       />
     </div>
   );

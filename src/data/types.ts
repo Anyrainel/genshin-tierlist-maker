@@ -23,3 +23,23 @@ export const elements: Element[] = ['Pyro', 'Hydro', 'Electro', 'Cryo', 'Anemo',
 export const weapons: Weapon[] = ['Sword', 'Claymore', 'Polearm', 'Catalyst', 'Bow'];
 
 export const regions: Region[] = ['Mondstadt', 'Liyue', 'Inazuma', 'Sumeru', 'Fontaine', 'Natlan', 'Snezhnaya', 'Nod-Krai', 'None'];
+
+export interface TierAssignment {
+  [characterName: string]: {
+    tier: string;
+    position: number;
+  };
+}
+
+export interface TierCustomization {
+  [tier: string]: {
+    displayName: string;
+    hidden: boolean;
+  };
+}
+
+export interface TierListData {
+  tierAssignments: TierAssignment;
+  tierCustomization: TierCustomization;
+  language: 'en' | 'zh';
+}

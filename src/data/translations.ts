@@ -8,6 +8,7 @@ export interface Translations {
     reset: string;
     showWeapons: string;
     hideWeapons: string;
+    customize: string;
   };
   elements: {
     Pyro: string;
@@ -34,6 +35,21 @@ export interface Translations {
     tierListLoadFailed: string;
     fileReadError: string;
   };
+  resetConfirmDialog: {
+    title: string;
+    message: string;
+    confirm: string;
+    cancel: string;
+  };
+  customizeDialog: {
+    title: string;
+    tierName: string;
+    hideTier: string;
+    save: string;
+    cancel: string;
+    reset: string;
+    defaultPrefix: string;
+  };
 }
 
 export const translations: Record<Language, Translations> = {
@@ -45,6 +61,7 @@ export const translations: Record<Language, Translations> = {
       reset: 'Reset',
       showWeapons: 'Show Weapon Types',
       hideWeapons: 'Hide Weapon Types',
+      customize: 'Customize',
     },
     elements: {
       Pyro: 'Pyro',
@@ -71,6 +88,21 @@ export const translations: Record<Language, Translations> = {
       tierListLoadFailed: 'Failed to load tier list',
       fileReadError: 'Error reading file',
     },
+    resetConfirmDialog: {
+      title: 'Reset Tier List',
+      message: 'Are you sure you want to reset the tier list? This will remove all character assignments and cannot be undone.',
+      confirm: 'Reset',
+      cancel: 'Cancel',
+    },
+    customizeDialog: {
+      title: 'Customize Tiers',
+      tierName: 'Tier Name',
+      hideTier: 'Hide Tier',
+      save: 'Save',
+      cancel: 'Cancel',
+      reset: 'Reset',
+      defaultPrefix: 'Default: ',
+    },
   },
   zh: {
     title: '原神强度榜工具',
@@ -80,6 +112,7 @@ export const translations: Record<Language, Translations> = {
       reset: '重置',
       showWeapons: '显示武器类型',
       hideWeapons: '隐藏武器类型',
+      customize: '自定义',
     },
     elements: {
       Pyro: '火',
@@ -105,6 +138,21 @@ export const translations: Record<Language, Translations> = {
       tierListLoaded: '加载成功',
       tierListLoadFailed: '加载失败',
       fileReadError: '文件读取错误',
+    },
+    resetConfirmDialog: {
+      title: '重置强度榜',
+      message: '确定要重置强度榜吗？这将删除所有角色分配，且无法撤销。',
+      confirm: '重置',
+      cancel: '取消',
+    },
+    customizeDialog: {
+      title: '自定义强度',
+      tierName: '级名称',
+      hideTier: '隐藏强度',
+      save: '保存',
+      cancel: '取消',
+      reset: '重置',
+      defaultPrefix: '默认: ',
     },
   },
 };

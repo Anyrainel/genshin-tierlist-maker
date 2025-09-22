@@ -37,4 +37,21 @@ export const LAYOUT = {
     GRID_BORDER: 'border-r border-b border-gray-600 bg-clip-padding',
     CENTER_BOX: 'flex items-center justify-center p-2',
     LABEL_TEXT: 'text-center break-words font-bold text-gray-100',
+} as const;
+
+export const COLORS = {
+    DARK_BG: 'bg-gray-900',
+    DARK_BG_SECONDARY: 'bg-gray-800',
+    DARK_BORDER: 'border-gray-700',
+    DARK_BORDER_SECONDARY: 'border-gray-600',
+    TEXT_WHITE: 'text-white',
+    TEXT_GRAY: 'text-gray-200',
+    TEXT_GRAY_PLACEHOLDER: 'placeholder-gray-400',
+} as const;
+
+export const BUTTONS = {
+    DESTRUCTIVE: 'bg-red-600 hover:bg-red-700 text-white',
+    PRIMARY: 'bg-blue-600 hover:bg-blue-700 text-white',
+    OUTLINE_DARK: 'border-gray-600 text-gray-200 hover:bg-gray-700',
+    SECONDARY: 'bg-gray-600 hover:bg-gray-700 text-white',
 } as const; 
