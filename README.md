@@ -13,8 +13,6 @@ A modern, interactive web application for creating and managing Genshin Impact c
 
 Visit the live application at: **[https://anyrainel.github.io/genshin-tierlist-maker](https://anyrainel.github.io/genshin-tierlist-maker)**
 
-No installation required - just open the link and start creating your tier lists!
-
 ## 🎮 How to Use
 
 ### Creating a Tier List

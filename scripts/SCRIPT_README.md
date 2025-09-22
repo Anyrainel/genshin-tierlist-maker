@@ -4,19 +4,11 @@ This directory contains a Python script to automatically generate character data
 
 ## Quick Start
 
-### Installation
-```bash
-# Install dependencies
-pip install -r requirements.txt
-```
-
 ### Execution
 ```bash
 # Run the data generator from the project root directory
 python scripts/generate_characters.py
 ```
-
-**Note**: You can modify the configuration parameters at the top of `generate_characters.py` before running to customize output location, validation rules, or other settings.
 
 ## Output Files
 
@@ -44,14 +36,6 @@ The script extracts data from specific table columns:
 - **Element Image URLs**: `img` `data-src` attribute in the Element column (first occurrence per element)
 - **Weapon Image URLs**: `img` `data-src` attribute in the Weapon column (first occurrence per weapon)
 
-## Features
-
-- **Traveler Filtering**: Skips Traveler character variants by default
-- **Smart Sorting**: Characters sorted by rarity then release date
-- **Image URL Cleaning**: Removes scaling parameters from all image URLs
-- **Real Image URLs**: Scrapes actual element and weapon images from the source
-- **Strict Validation**: Throws exceptions for missing or invalid data
-
 ## Error Handling
 
 The script uses strict validation and will throw exceptions if:
@@ -60,5 +44,3 @@ The script uses strict validation and will throw exceptions if:
 - Rarity cannot be extracted from alt text
 - Image URL cannot be found
 - Release date cannot be parsed
-
-This ensures data integrity and prevents silent failures.
