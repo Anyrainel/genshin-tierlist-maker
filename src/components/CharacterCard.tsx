@@ -11,7 +11,6 @@ interface CharacterCardProps {
   className?: string;
   hoverDirection?: 'left' | 'right' | null;
   onDragStart?: (e: React.DragEvent) => void;
-  onDragEnd?: () => void;
   onDoubleClick?: () => void;
 }
 
@@ -22,7 +21,6 @@ const CharacterCard = ({
   className,
   hoverDirection = null,
   onDragStart,
-  onDragEnd,
   onDoubleClick
 }: CharacterCardProps) => {
   const { showWeapons } = useWeaponVisibility();
@@ -44,7 +42,6 @@ const CharacterCard = ({
       }}
       draggable={draggable}
       onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
       onDoubleClick={onDoubleClick}
       data-character-id={character.name}
       title={`${character.name} (Double-click to remove)`}

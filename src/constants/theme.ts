@@ -22,13 +22,13 @@ export const RARITY_COLORS = {
 } as const;
 
 export const ELEMENT_COLORS = {
-    Pyro: 'bg-genshin-pyro/60', // More transparent for better contrast
-    Hydro: 'bg-genshin-hydro/60',
-    Electro: 'bg-genshin-electro/60',
-    Cryo: 'bg-genshin-cryo/60',
-    Anemo: 'bg-genshin-anemo/60',
-    Geo: 'bg-genshin-geo/60',
-    Dendro: 'bg-genshin-dendro/60'
+    Pyro: 'bg-genshin-pyro/70', // More transparent for better contrast
+    Hydro: 'bg-genshin-hydro/70',
+    Electro: 'bg-genshin-electro/70',
+    Cryo: 'bg-genshin-cryo/70',
+    Anemo: 'bg-genshin-anemo/70',
+    Geo: 'bg-genshin-geo/70',
+    Dendro: 'bg-genshin-dendro/70'
 } as const;
 
 export const LAYOUT = {

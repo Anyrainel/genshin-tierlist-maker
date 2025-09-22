@@ -1,33 +1,60 @@
 import { useState, useRef } from 'react';
-import { Character, tiers, elements } from '../data/types';
-import { elementImages } from '../data/elements';
-import TierRow from './TierRow';
+import { Character, tiers } from '../data/types';
+import { characters } from '../data/characters';
+import TierGrid from './TierGrid';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { useDragAndDrop } from '../hooks/useDragAndDrop';
-import { ELEMENT_COLORS, LAYOUT } from '../constants/theme';
-import { cn } from '../lib/utils';
+
 import { TierAssignment, saveTierList, loadTierList } from '../data/savefile';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useWeaponVisibility } from '../contexts/WeaponVisibilityContext';
 
-interface TierListProps {
-  characters: Character[];
-}
-
-const TierList = ({ characters }: TierListProps) => {
+const TierList = () => {
   const [tierAssignments, setTierAssignments] = useState<TierAssignment>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { language, setLanguage, t } = useLanguage();
   const { showWeapons, setShowWeapons } = useWeaponVisibility();
+  const allTiers = [...tiers, 'Pool'];
 
-  const handleTierAssignment = (draggedId: string, dropId: string | null, tier: string, direction: 'left' | 'right') => {
+  const createCharactersPerTierMap = (): { [tier: string]: Character[] } => {
+    const charactersPerTier: { [tier: string]: Character[] } = {};
+
+    // Initialize all tiers with empty arrays
+    allTiers.forEach(tier => {
+      charactersPerTier[tier] = [];
+    });
+
+    // Process all characters once and group them by tier
+    characters.forEach(character => {
+      const assignment = tierAssignments[character.name];
+      if (assignment) {
+        // Character is assigned to a tier
+        charactersPerTier[assignment.tier].push(character);
+      } else {
+        // Character is in the pool
+        charactersPerTier['Pool'].push(character);
+      }
+    });
+
+    // Sort characters within each tier by position
+    allTiers.forEach(tier => {
+      charactersPerTier[tier].sort((a, b) => {
+        const posA = tierAssignments[a.name]?.position ?? 0;
+        const posB = tierAssignments[b.name]?.position ?? 0;
+        return posA - posB;
+      });
+    });
+
+    return charactersPerTier;
+  };
+
+  const handleTierAssignment = (dragName: string, dropName: string | null, tier: string, direction: 'left' | 'right') => {
     setTierAssignments(prev => {
       const newAssignments = { ...prev };
-      const draggedChar = characters.find(c => c.name === draggedId);
+      const draggedChar = characters.find(c => c.name === dragName);
       if (!draggedChar) return prev;
 
-      const oldAssignment = prev[draggedId];
+      const oldAssignment = prev[dragName];
       const isSameTier = oldAssignment?.tier === tier;
 
       // Get all characters in the same element and tier, sorted by position
@@ -44,11 +71,11 @@ const TierList = ({ characters }: TierListProps) => {
         .sort((a, b) => a.position - b.position);
 
       // If no drop target, append to the end
-      if (!dropId) {
+      if (!dropName) {
         const newPosition = direction === 'left' ? 0
           : elementChars.length > 0 ? Math.max(...elementChars.map(c => c.position)) + 1
             : 0;
-        newAssignments[draggedId] = { tier, position: newPosition };
+        newAssignments[dragName] = { tier, position: newPosition };
 
         // If inserting at the beginning, shift all other cards right
         if (direction === 'left') {
@@ -60,7 +87,7 @@ const TierList = ({ characters }: TierListProps) => {
       }
 
       // Find the drop target's current position
-      const dropTargetIndex = elementChars.findIndex(card => card.name === dropId);
+      const dropTargetIndex = elementChars.findIndex(card => card.name === dropName);
       if (dropTargetIndex === -1) return prev;
 
       // Calculate the new position based on direction
@@ -86,16 +113,18 @@ const TierList = ({ characters }: TierListProps) => {
       });
 
       // Set the dragged card's new position
-      newAssignments[draggedId] = { tier, position: newPosition };
+      newAssignments[dragName] = { tier, position: newPosition };
 
       return newAssignments;
     });
   };
 
-  const handleRemoveFromTier = (character: Character) => {
+  const handleRemoveFromTier = (dragName: string) => {
     setTierAssignments(prev => {
       const newAssignments = { ...prev };
-      const oldAssignment = prev[character.name];
+      const oldAssignment = prev[dragName];
+      const character = characters.find(c => c.name === dragName);
+      if (!character) return prev;
 
       if (oldAssignment) {
         // Get all characters in the same tier and element, sorted by position
@@ -162,33 +191,6 @@ const TierList = ({ characters }: TierListProps) => {
     }
   };
 
-  const {
-    handleDragStart,
-    handleDragOver,
-    handleDragEnd,
-    handleDrop,
-    handleRemoveFromTier: handleRemove,
-    hoveredCardId,
-    hoverDirection
-  } = useDragAndDrop({
-    onTierAssignment: handleTierAssignment,
-    onRemoveFromTier: handleRemoveFromTier
-  });
-
-  const getCharactersForTier = (tier: string) => {
-    return characters
-      .filter(char => tierAssignments[char.name]?.tier === tier)
-      .sort((a, b) => {
-        const posA = tierAssignments[a.name]?.position ?? 0;
-        const posB = tierAssignments[b.name]?.position ?? 0;
-        return posA - posB;
-      });
-  };
-
-  const poolCharacters = characters.filter(char => !tierAssignments[char.name]);
-
-  const allTiers = [...tiers, 'Pool'];
-
   return (
     <div className="flex flex-col w-full max-w-[90vw] mx-auto py-8 px-4">
       <div className="flex justify-between items-center mb-4">
@@ -250,55 +252,12 @@ const TierList = ({ characters }: TierListProps) => {
         </div>
       </div>
       
-      <div className="relative">
-        <div className="flex w-full border-b border-gray-700">
-          <div className="w-16"></div>
-          <div className={cn(
-            "flex-grow grid",
-            LAYOUT.GRID_COLUMNS,
-            "gap-0"
-          )}>
-            {elements.map((element, index) => (
-              <div
-                key={element} 
-                className={cn(
-                  "p-2 text-center font-bold text-white",
-                  ELEMENT_COLORS[element],
-                  "rounded-tl-md rounded-tr-md",
-                  "border-r border-gray-700 last:border-r-0",
-                  "flex items-center justify-center gap-2"
-                )}
-              >
-                <img
-                  src={elementImages[element]}
-                  alt={`${element} element`}
-                  className="w-6 h-6 drop-shadow-lg filter brightness-110 contrast-125"
-                />
-                {t.elements[element]}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="border-r border-b border-gray-700">
-          <div className="flex flex-col">
-            {allTiers.map(tier => (
-              <TierRow
-                key={tier}
-                tier={tier}
-                characters={tier === 'Pool' ? poolCharacters : getCharactersForTier(tier)}
-                onDragOver={handleDragOver}
-                onDrop={handleDrop}
-                onDragStart={handleDragStart}
-                onRemoveFromTier={handleRemove}
-                className={tier === 'Pool' ? 'bg-gray-800/50' : undefined}
-                hoveredCardId={hoveredCardId}
-                hoverDirection={hoverDirection}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
+      <TierGrid
+        allTiers={allTiers}
+        charactersPerTier={createCharactersPerTierMap()}
+        onTierAssignment={handleTierAssignment}
+        onRemoveFromTier={handleRemoveFromTier}
+      />
     </div>
   );
 };

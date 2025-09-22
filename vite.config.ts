@@ -5,7 +5,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: mode === 'production' ? '/genshin-tierlist-maker/' : '/',
+  base: '/genshin-tierlist-maker/',
   server: {
     host: "::",
     port: 8080,
@@ -20,4 +20,5 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  publicDir: 'public',
 }));
