@@ -1,73 +1,51 @@
-# Welcome to your Lovable project
+# Genshin Impact Tier List Maker
 
-## Project info
+A modern, interactive web application for creating and managing Genshin Impact character tier lists. Drag and drop characters to organize them by tier and element, with full save/load functionality.
 
-**URL**: https://lovable.dev/projects/262096a7-62e4-4381-a9aa-03c98bc10d8c
+![Genshin Impact Tier List Maker](https://img.shields.io/badge/Genshin%20Impact-Tier%20List%20Maker-blue?style=for-the-badge&logo=react)
 
-## How can I edit this code?
+## ✨ Features
 
-There are several ways of editing your application.
+- **Element-Based Strategy**: Unlike generic tier lists that mix all characters together, this organizes characters by their elements within each tier, helping you make better investment decisions.
+- **Save/Load Tier Lists**: Create and save multiple tier lists for different scenarios to your likings.
 
-**Use Lovable**
+## 🚀 Live Demo
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/262096a7-62e4-4381-a9aa-03c98bc10d8c) and start prompting.
+Visit the live application at: **[https://anyrainel.github.io/genshin-tierlist-maker](https://anyrainel.github.io/genshin-tierlist-maker)**
 
-Changes made via Lovable will be committed automatically to this repo.
+No installation required - just open the link and start creating your tier lists!
 
-**Use your preferred IDE**
+## 🎮 How to Use
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Creating a Tier List
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+1. **Drag Characters**: Click and drag characters from the pool to any tier row
+2. **Organize by Element**: Characters are automatically organized by their element within each tier
+3. **Reorder Characters**: Drag characters within the same tier to reorder them
+4. **Remove Characters**: Drag characters back to the pool or use the remove functionality
 
-Follow these steps:
+### Saving and Loading
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+- **Save**: Click the "Save" button to download your tier list as a JSON file
+- **Load**: Click the "Load" button to upload and restore a previously saved tier list
+- **Reset**: Use the "Reset Tier List" button to clear all assignments
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## 🛠️ Technology Stack
 
-# Step 3: Install the necessary dependencies.
-npm i
+- **Frontend Framework**: React 18 with TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS
+- **UI Components**: shadcn/ui with Radix UI primitives
+- **State Management**: React hooks and local state
+- **Drag & Drop**: Custom implementation with HTML5 Drag and Drop API
+- **Icons**: Lucide React
+- **Toast Notifications**: Sonner
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+## 🌐 Deployment
 
-**Edit a file directly in GitHub**
+This application is automatically deployed to GitHub Pages. Any changes pushed to the main branch will automatically update the live site.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🙏 Acknowledgments
 
-**Use GitHub Codespaces**
+- Character data sourced from [Genshin Impact Wiki](https://genshin-impact.fandom.com/)
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/262096a7-62e4-4381-a9aa-03c98bc10d8c) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes it is!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
