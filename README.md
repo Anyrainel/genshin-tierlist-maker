@@ -22,7 +22,7 @@ No installation required - just open the link and start creating your tier lists
 1. **Drag Characters**: Click and drag characters from the pool to any tier row
 2. **Organize by Element**: Characters are automatically organized by their element within each tier
 3. **Reorder Characters**: Drag characters within the same tier to reorder them
-4. **Remove Characters**: Drag characters back to the pool or use the remove functionality
+4. **Remove Characters**: Drag characters back to the pool
 
 ### Saving and Loading
 
@@ -37,8 +37,6 @@ No installation required - just open the link and start creating your tier lists
 - **Styling**: Tailwind CSS
 - **UI Components**: shadcn/ui with Radix UI primitives
 - **State Management**: React hooks and local state
-- **Drag & Drop**: Custom implementation with HTML5 Drag and Drop API
-- **Icons**: Lucide React
 - **Toast Notifications**: Sonner
 
 ## 🌐 Deployment

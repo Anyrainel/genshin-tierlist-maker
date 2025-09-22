@@ -1,6 +1,8 @@
 import { Character } from '../data/types';
 import { cn } from '@/lib/utils';
 import { RARITY_COLORS, LAYOUT } from '../constants/theme';
+import { weaponImages } from '../data/weapons';
+import { useWeaponVisibility } from '../contexts/WeaponVisibilityContext';
 
 interface CharacterCardProps {
   character: Character;
@@ -23,13 +25,14 @@ const CharacterCard = ({
   onDragEnd,
   onDoubleClick
 }: CharacterCardProps) => {
+  const { showWeapons } = useWeaponVisibility();
   const offset = hoverDirection === 'left' ? 3 : hoverDirection === 'right' ? -3 : 0;
 
   return (
     <div
       className={cn(
         LAYOUT.CHARACTER_CARD_SIZE,
-        'rounded-md overflow-hidden transition-all',
+        'rounded-md overflow-hidden transition-all relative',
         RARITY_COLORS[character.rarity],
         draggable ? 'cursor-grab active:cursor-grabbing' : '',
         isDragging ? 'scale-105 opacity-50' : '',
@@ -53,6 +56,15 @@ const CharacterCard = ({
         className="w-full h-full object-cover"
         loading="lazy"
       />
+      {showWeapons && !isDragging && (
+        <div className="absolute -top-1 -right-1 w-7 h-7 flex items-center justify-center">
+          <img
+            src={weaponImages[character.weapon]}
+            alt={character.weapon}
+            className="w-5 h-5 object-contain filter brightness-110 drop-shadow-lg opacity-80 invert"
+          />
+        </div>
+      )}
     </div>
   );
 };

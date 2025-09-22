@@ -8,6 +8,8 @@ import { useDragAndDrop } from '../hooks/useDragAndDrop';
 import { ELEMENT_COLORS, LAYOUT } from '../constants/theme';
 import { cn } from '../lib/utils';
 import { TierAssignment, saveTierList, loadTierList } from '../data/savefile';
+import { useLanguage } from '../contexts/LanguageContext';
+import { useWeaponVisibility } from '../contexts/WeaponVisibilityContext';
 
 interface TierListProps {
   characters: Character[];
@@ -16,6 +18,8 @@ interface TierListProps {
 const TierList = ({ characters }: TierListProps) => {
   const [tierAssignments, setTierAssignments] = useState<TierAssignment>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { language, setLanguage, t } = useLanguage();
+  const { showWeapons, setShowWeapons } = useWeaponVisibility();
 
   const handleTierAssignment = (draggedId: string, dropId: string | null, tier: string, direction: 'left' | 'right') => {
     setTierAssignments(prev => {
@@ -128,11 +132,11 @@ const TierList = ({ characters }: TierListProps) => {
 
   const resetTierList = () => {
     setTierAssignments({});
-    toast.info("Tier list has been reset");
+    toast.info(t.messages.tierListReset);
   };
 
   const handleSaveTierList = () => {
-    saveTierList(tierAssignments);
+    saveTierList(tierAssignments, language);
   };
 
   const handleLoadTierList = () => {
@@ -146,7 +150,7 @@ const TierList = ({ characters }: TierListProps) => {
     if (!file) return;
 
     try {
-      const loadedAssignments = await loadTierList(file);
+      const loadedAssignments = await loadTierList(file, language);
       setTierAssignments(loadedAssignments);
     } catch (error) {
       // Error already handled in loadTierList function
@@ -188,21 +192,47 @@ const TierList = ({ characters }: TierListProps) => {
   return (
     <div className="flex flex-col w-full max-w-[90vw] mx-auto py-8 px-4">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-3xl font-bold text-gray-200">Genshin Impact Tier List Maker</h1>
+        <div className="flex items-center gap-4">
+          <h1 className="text-3xl font-bold text-gray-200">{t.title}</h1>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setLanguage(language === 'en' ? 'zh' : 'en')}
+              className="bg-gray-700 hover:bg-gray-600 text-white border-gray-600"
+            >
+              <span className="flex items-center gap-1">
+                <span className={language === 'zh' ? 'font-bold text-white' : 'text-gray-400'}>
+                  中
+                </span>
+                <span className="text-gray-500">/</span>
+                <span className={language === 'en' ? 'font-bold text-white' : 'text-gray-400'}>
+                  EN
+                </span>
+              </span>
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => setShowWeapons(!showWeapons)}
+              className="bg-gray-700 hover:bg-gray-600 text-white border-gray-600"
+            >
+              {showWeapons ? t.buttons.hideWeapons : t.buttons.showWeapons}
+            </Button>
+          </div>
+        </div>
         <div className="flex gap-2">
           <Button
             variant="default"
             onClick={handleSaveTierList}
             className="bg-emerald-600 hover:bg-emerald-700 text-white"
           >
-            Save
+            {t.buttons.save}
           </Button>
           <Button
             variant="default"
             onClick={handleLoadTierList}
             className="bg-blue-600 hover:bg-blue-700 text-white"
           >
-            Load
+            {t.buttons.load}
           </Button>
           <input
             type="file"
@@ -215,7 +245,7 @@ const TierList = ({ characters }: TierListProps) => {
             variant="destructive"
             onClick={resetTierList}
           >
-            Reset Tier List
+            {t.buttons.reset}
           </Button>
         </div>
       </div>
@@ -244,7 +274,7 @@ const TierList = ({ characters }: TierListProps) => {
                   alt={`${element} element`}
                   className="w-6 h-6 drop-shadow-lg filter brightness-110 contrast-125"
                 />
-                {element}
+                {t.elements[element]}
               </div>
             ))}
           </div>

@@ -3,6 +3,7 @@ import CharacterCard from './CharacterCard';
 import { cn } from '@/lib/utils';
 import { TIER_COLORS, TIER_BG_COLORS, LAYOUT, ELEMENT_COLORS } from '../constants/theme';
 import { elements } from '../data/types';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface TierRowProps {
   tier: string;
@@ -27,14 +28,19 @@ const TierRow = ({
   hoveredCardId = null,
   hoverDirection = null
 }: TierRowProps) => {
+  const { t } = useLanguage();
   return (
-    <div className={cn('grid grid-cols-[4rem_1fr] gap-0 border-b border-gray-700 last:border-b-0', LAYOUT.MIN_ROW_HEIGHT, className)}>
+    <div className={cn('grid grid-cols-[4rem_1fr] gap-0 border-b border-gray-700', LAYOUT.MIN_ROW_HEIGHT, className)}>
       <div className={cn(
-        'flex items-center justify-center font-bold text-2xl',
+        'flex items-center justify-center font-bold',
+        tier === 'Pool' ? 'text-lg' : 'text-2xl',
         TIER_COLORS[tier as keyof typeof TIER_COLORS],
-        'text-gray-100 rounded-l-md border-r border-gray-700'
+        'text-gray-100 rounded-l-md border-r border-gray-700',
+        'px-1 py-1 text-center break-words'
       )}>
-        {tier}
+        <span className="leading-tight text-center">
+          {t.tiers[tier as keyof typeof t.tiers] || tier}
+        </span>
       </div>
 
       <div 
