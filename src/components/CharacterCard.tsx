@@ -11,16 +11,18 @@ interface CharacterCardProps {
   className?: string;
   hoverDirection?: 'left' | 'right' | null;
   onDragStart?: (e: React.DragEvent) => void;
+  onDragEnd?: (e: React.DragEvent) => void;
   onDoubleClick?: () => void;
 }
 
 const CharacterCard = ({ 
   character, 
   isDragging, 
-  draggable = false, 
+  draggable = true, 
   className,
   hoverDirection = null,
   onDragStart,
+  onDragEnd,
   onDoubleClick
 }: CharacterCardProps) => {
   const { showWeapons } = useWeaponVisibility();
@@ -29,10 +31,9 @@ const CharacterCard = ({
   return (
     <div
       className={cn(
-        LAYOUT.CHARACTER_CARD_SIZE,
-        'rounded-md overflow-hidden transition-all relative',
+        'w-16 h-16 rounded-md overflow-hidden transition-all relative',
         RARITY_COLORS[character.rarity],
-        draggable ? 'cursor-grab active:cursor-grabbing' : '',
+        'cursor-grab active:cursor-grabbing',
         isDragging ? 'scale-105 opacity-50' : '',
         'hover:scale-105',
         className
@@ -42,9 +43,9 @@ const CharacterCard = ({
       }}
       draggable={draggable}
       onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
       onDoubleClick={onDoubleClick}
       data-character-id={character.name}
-      title={`${character.name} (Double-click to remove)`}
     >
       <img
         src={character.imageUrl}

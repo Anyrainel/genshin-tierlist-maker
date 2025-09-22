@@ -63,9 +63,9 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Genshin Impact element colors
+				// Element colors
 				genshin: {
-					'pyro': '#de2c2c',
+					'pyro': '#e35a4f',
 					'hydro': '#2a8fbd',
 					'electro': '#b38ed5',
 					'cryo': '#98d2e6',
@@ -73,6 +73,20 @@ export default {
 					'geo': '#e3b342',
 					'dendro': '#7fb92c',
 					'bg': '#f5f3e6',
+				},
+				// Tier colors
+				tier: {
+					's': '#b92f3a',
+					'a': '#dd8559',
+					'b': '#e6b44d',
+					'c': '#43ad8b',
+					'd': '#4a85cd',
+					'pool': '#757575',
+				},
+				// Rarity colors
+				rarity: {
+					'4': '#9b6b9e',
+					'5': '#c89b3c',
 				}
 			},
 			borderRadius: {

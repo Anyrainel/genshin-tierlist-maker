@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Character } from '../data/types';
 import { RARITY_COLORS } from '../constants/theme';
+import { toast } from 'sonner';
 
 interface UseDragAndDropProps {
     onTierAssignment: (dragName: string, dropName: string | null, tier: string, direction: 'left' | 'right') => void;
-    onRemoveFromTier: (dragName: string) => void;
+    onRemoveFromTiers: (dragName: string) => void;
 }
 
 interface DropPosition {
@@ -15,13 +16,18 @@ interface DropPosition {
     direction: 'left' | 'right' | null;
 }
 
-export const useDragAndDrop = ({ onTierAssignment, onRemoveFromTier }: UseDragAndDropProps) => {
-    const [draggedCharacter, setDraggedCharacter] = useState<Character | null>(null);
-    const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
+export const useDragAndDrop = ({ onTierAssignment, onRemoveFromTiers }: UseDragAndDropProps) => {
+    const [hoveredCardName, setHoveredCardName] = useState<string | null>(null);
     const [hoverDirection, setHoverDirection] = useState<'left' | 'right' | null>(null);
 
+    // Use ref to track dragged character immediately (synchronous)
+    const draggedCharacterRef = useRef<Character | null>(null);
+
     const calculateDropPosition = (e: React.DragEvent): DropPosition => {
-        if (!draggedCharacter) {
+        // Use ref for immediate access to dragged character
+        const currentDraggedCharacter = draggedCharacterRef.current;
+        // console.log('🔍 CALCULATE DROP POSITION: draggedCharacter =', currentDraggedCharacter);
+        if (!currentDraggedCharacter) {
             return { element: null, tier: null, position: null, cardName: null, direction: null };
         }
 
@@ -48,7 +54,7 @@ export const useDragAndDrop = ({ onTierAssignment, onRemoveFromTier }: UseDragAn
         }
 
         // Check if dropping in the correct element section
-        if (draggedCharacter.element !== dropElement) {
+        if (currentDraggedCharacter.element !== dropElement) {
             return { element: null, tier: null, position: null, cardName: null, direction: null };
         }
 
@@ -95,7 +101,7 @@ export const useDragAndDrop = ({ onTierAssignment, onRemoveFromTier }: UseDragAn
 
             // If this is the currently hovered card, adjust for its offset
             let adjustedRect = rect;
-            if (cardName === hoveredCardId) {
+            if (cardName === hoveredCardName) {
                 const offset = hoverDirection === 'left' ? 3 : hoverDirection === 'right' ? -3 : 0;
                 adjustedRect = new DOMRect(
                     rect.x - offset,
@@ -109,7 +115,7 @@ export const useDragAndDrop = ({ onTierAssignment, onRemoveFromTier }: UseDragAn
             if (dropPoint.x >= adjustedRect.left && dropPoint.x <= adjustedRect.right &&
                 dropPoint.y >= adjustedRect.top && dropPoint.y <= adjustedRect.bottom) {
                 // If we're over the dragged card itself, return all nulls
-                if (cardName === draggedCharacter.name) {
+                if (cardName === currentDraggedCharacter.name) {
                     return { element: null, tier: null, position: null, cardName: null, direction: null };
                 }
                 // We're directly over this card, determine left/right direction
@@ -131,7 +137,7 @@ export const useDragAndDrop = ({ onTierAssignment, onRemoveFromTier }: UseDragAn
 
             // If this is the currently hovered card, adjust for its offset
             let adjustedRect = rect;
-            if (cardId === hoveredCardId) {
+            if (cardId === hoveredCardName) {
                 const offset = hoverDirection === 'left' ? 3 : hoverDirection === 'right' ? -3 : 0;
                 adjustedRect = new DOMRect(
                     rect.x - offset,
@@ -158,7 +164,7 @@ export const useDragAndDrop = ({ onTierAssignment, onRemoveFromTier }: UseDragAn
             }
         }
 
-        if (!nearestCard || nearestCard.cardId === draggedCharacter.name) {
+        if (!nearestCard || nearestCard.cardId === currentDraggedCharacter.name) {
             return { element: null, tier: null, position: null, cardName: null, direction: null };
         }
 
@@ -167,11 +173,15 @@ export const useDragAndDrop = ({ onTierAssignment, onRemoveFromTier }: UseDragAn
         const midX = rect.left + rect.width / 2;
         const direction = dropPoint.x < midX ? 'left' : 'right';
 
-        return { element: dropElement, tier, position: null, cardName: cardId, direction };
+        const result = { element: dropElement, tier, position: null, cardName: cardId, direction: direction as 'left' | 'right' };
+        // console.log('✅ CALCULATE: Final result =', result);
+        return result;
     };
 
     const handleDragStart = (e: React.DragEvent, character: Character) => {
-        setDraggedCharacter(character);
+        // console.log('🚀 DRAG START:', character.name);
+        // Set ref immediately
+        draggedCharacterRef.current = character;
         e.dataTransfer.setData('characterId', character.name);
 
         // Create a drag preview that matches the CharacterCard component
@@ -198,73 +208,92 @@ export const useDragAndDrop = ({ onTierAssignment, onRemoveFromTier }: UseDragAn
         dragPreview.appendChild(img);
         document.body.appendChild(dragPreview);
         e.dataTransfer.setDragImage(dragPreview, 32, 32);
+        // toast.success(`${character.name} is being dragged`);
 
         // Clean up the preview element after drag starts
         setTimeout(() => {
-            document.body.removeChild(dragPreview);
+            if (document.body.contains(dragPreview)) {
+                document.body.removeChild(dragPreview);
+            }
         }, 0);
     };
 
     const handleDragOver = (e: React.DragEvent) => {
         e.preventDefault();
-        if (!draggedCharacter) return;
+        const currentDraggedCharacter = draggedCharacterRef.current;
+        if (!currentDraggedCharacter) {
+            return;
+        }
 
         const dropPos = calculateDropPosition(e);
+        // console.log('🔄 DRAG OVER:', { draggedCharacter: currentDraggedCharacter.name, dropPos });
 
         // Only set hover states if we have both cardId and direction
         if (dropPos.cardName && dropPos.direction) {
-            setHoveredCardId(dropPos.cardName);
+            setHoveredCardName(dropPos.cardName);
             setHoverDirection(dropPos.direction);
         } else {
-            setHoveredCardId(null);
+            setHoveredCardName(null);
             setHoverDirection(null);
         }
     };
 
     const handleDrop = (e: React.DragEvent) => {
         e.preventDefault();
-        if (!draggedCharacter) return;
-
-        // Reset hover state immediately
-        setHoveredCardId(null);
-        setHoverDirection(null);
+        const currentDraggedCharacter = draggedCharacterRef.current;
+        // console.log('🎯 DROP START:', currentDraggedCharacter?.name);
+        if (!currentDraggedCharacter) {
+            return;
+        }
+        const charName = currentDraggedCharacter.name;
 
         const dropPos = calculateDropPosition(e);
+        // console.log('🎯 DROP POSITION:', { charName, dropPos });
 
         if (dropPos.element) {
             // If dropping in the pool, check if it's the correct element section
             if (dropPos.tier === 'Pool') {
-                onRemoveFromTier(draggedCharacter.name);
+                onRemoveFromTiers(charName);
+                // toast.success(`${charName} moved to Pool`);
             }
                 // Handle different drop positions
             else if (dropPos.position === 'first') {
-                onTierAssignment(draggedCharacter.name, null, dropPos.tier, 'left');
-                // toast.success(`${draggedCharacter.name} moved to ${dropPos.tier} tier first`);
+                onTierAssignment(charName, null, dropPos.tier, 'left');
+                // toast.success(`${charName} moved to ${dropPos.tier} tier first`);
             }
             else if (dropPos.position === 'last') {
-                onTierAssignment(draggedCharacter.name, null, dropPos.tier, 'right');
-                // toast.success(`${draggedCharacter.name} moved to ${dropPos.tier} tier last`);
+                onTierAssignment(charName, null, dropPos.tier, 'right');
+                // toast.success(`${charName} moved to ${dropPos.tier} tier last`);
             }
             else if (dropPos.position === 'only') {
-                onTierAssignment(draggedCharacter.name, null, dropPos.tier, 'left');
-                // toast.success(`${draggedCharacter.name} moved to ${dropPos.tier} tier only`);
+                onTierAssignment(charName, null, dropPos.tier, 'left');
+                // toast.success(`${charName} moved to ${dropPos.tier} tier only`);
             }
             else if (dropPos.cardName && dropPos.direction) {
-                onTierAssignment(draggedCharacter.name, dropPos.cardName, dropPos.tier, dropPos.direction);
-                // toast.success(`${draggedCharacter.name} moved to ${dropPos.tier} tier, ${dropPos.cardId}'s ${dropPos.direction}`);
+                onTierAssignment(charName, dropPos.cardName, dropPos.tier, dropPos.direction);
+                // toast.success(`${charName} moved to ${dropPos.tier} tier, ${dropPos.cardName}'s ${dropPos.direction}`);
             }
         }
 
-        // Always clear the dragged character after processing
-        setDraggedCharacter(null);
+        // console.log('🧹 DROP: Resetting state');
+        setHoveredCardName(null);
+        setHoverDirection(null);
+        draggedCharacterRef.current = null;
+    };
+
+    const handleDragEnd = (e: React.DragEvent) => {
+        // console.log('🏁 DRAG END: Event triggered');
+        setHoveredCardName(null);
+        setHoverDirection(null);
+        draggedCharacterRef.current = null;
     };
 
     return {
-        draggedCharacter,
-        hoveredCardId,
+        hoveredCardName,
         hoverDirection,
         handleDragStart,
         handleDragOver,
         handleDrop,
+        handleDragEnd,
     };
 }; 

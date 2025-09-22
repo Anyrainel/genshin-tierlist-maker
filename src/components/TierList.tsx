@@ -1,10 +1,10 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { Character, tiers } from '../data/types';
 import { characters } from '../data/characters';
 import TierGrid from './TierGrid';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-
+import { useDragAndDrop } from '../hooks/useDragAndDrop';
 import { TierAssignment, saveTierList, loadTierList } from '../data/savefile';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useWeaponVisibility } from '../contexts/WeaponVisibilityContext';
@@ -47,6 +47,8 @@ const TierList = () => {
 
     return charactersPerTier;
   };
+
+  const charactersPerTier = useMemo(() => createCharactersPerTierMap(), [tierAssignments]);
 
   const handleTierAssignment = (dragName: string, dropName: string | null, tier: string, direction: 'left' | 'right') => {
     setTierAssignments(prev => {
@@ -119,7 +121,7 @@ const TierList = () => {
     });
   };
 
-  const handleRemoveFromTier = (dragName: string) => {
+  const handleRemoveFromTiers = (dragName: string) => {
     setTierAssignments(prev => {
       const newAssignments = { ...prev };
       const oldAssignment = prev[dragName];
@@ -191,6 +193,11 @@ const TierList = () => {
     }
   };
 
+  const { hoveredCardName, hoverDirection, handleDragStart, handleDragOver, handleDrop, handleDragEnd } = useDragAndDrop({
+    onTierAssignment: handleTierAssignment,
+    onRemoveFromTiers: handleRemoveFromTiers,
+  });
+
   return (
     <div className="flex flex-col w-full max-w-[90vw] mx-auto py-8 px-4">
       <div className="flex justify-between items-center mb-4">
@@ -254,9 +261,14 @@ const TierList = () => {
       
       <TierGrid
         allTiers={allTiers}
-        charactersPerTier={createCharactersPerTierMap()}
-        onTierAssignment={handleTierAssignment}
-        onRemoveFromTier={handleRemoveFromTier}
+        charactersPerTier={charactersPerTier}
+        onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+        onDragEnd={handleDragEnd}
+        onRemoveFromTiers={handleRemoveFromTiers}
+        hoveredCardName={hoveredCardName}
+        hoverDirection={hoverDirection}
       />
     </div>
   );
