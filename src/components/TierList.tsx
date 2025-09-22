@@ -13,6 +13,7 @@ import { useWeaponVisibility } from '../contexts/WeaponVisibilityContext';
 const TierList = () => {
   const [tierAssignments, setTierAssignments] = useState<TierAssignment>({});
   const [tierCustomization, setTierCustomization] = useState<TierCustomization>({});
+  const [customTitle, setCustomTitle] = useState<string>('');
   const [isCustomizeDialogOpen, setIsCustomizeDialogOpen] = useState(false);
   const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -186,7 +187,7 @@ const TierList = () => {
     setIsResetConfirmOpen(false);
   };
 
-  const handleTierCustomizationSave = (customization: TierCustomization) => {
+  const handleTierCustomizationSave = (customization: TierCustomization, customTitle?: string) => {
     // Remove characters from hidden tiers
     const newAssignments = { ...tierAssignments };
     const hiddenTiers = Object.keys(customization).filter(tier => customization[tier]?.hidden);
@@ -201,6 +202,11 @@ const TierList = () => {
 
     setTierAssignments(newAssignments);
     setTierCustomization(customization);
+    if (customTitle !== undefined) {
+      setCustomTitle(customTitle);
+    }
+
+    toast.success(t.messages.customizationsSaved);
   };
 
   const saveTierList = (data: TierListData): void => {
@@ -253,6 +259,7 @@ const TierList = () => {
     const data: TierListData = {
       tierAssignments,
       tierCustomization,
+      customTitle: customTitle || undefined,
       language
     };
     saveTierList(data);
@@ -272,6 +279,7 @@ const TierList = () => {
       const loadedData = await loadTierList(file);
       setTierAssignments(loadedData.tierAssignments);
       setTierCustomization(loadedData.tierCustomization);
+      setCustomTitle(loadedData.customTitle || '');
       // Update language if it was different in the loaded file
       if (loadedData.language !== language) {
         setLanguage(loadedData.language);
@@ -295,10 +303,11 @@ const TierList = () => {
     <div className="flex flex-col w-full max-w-[90vw] mx-auto py-8 px-4">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-4">
-          <h1 className="text-3xl font-bold text-gray-200">{t.title}</h1>
+          <h1 className="text-3xl font-bold text-gray-200">{customTitle || t.title}</h1>
           <div className="flex gap-2">
             <Button
               variant="outline"
+              size="sm"
               onClick={() => setLanguage(language === 'en' ? 'zh' : 'en')}
               className="bg-gray-700 hover:bg-gray-600 text-white border-gray-600"
             >
@@ -314,6 +323,7 @@ const TierList = () => {
             </Button>
             <Button
               variant="outline"
+              size="sm"
               onClick={() => setShowWeapons(!showWeapons)}
               className="bg-gray-700 hover:bg-gray-600 text-white border-gray-600"
             >
@@ -378,6 +388,7 @@ const TierList = () => {
         onClose={() => setIsCustomizeDialogOpen(false)}
         onSave={handleTierCustomizationSave}
         initialCustomization={tierCustomization}
+        initialCustomTitle={customTitle}
       />
 
       <ResetConfirmDialog

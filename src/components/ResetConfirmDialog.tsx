@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -20,12 +20,10 @@ const ResetConfirmDialog = ({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{t.resetConfirmDialog.title}</DialogTitle>
-        </DialogHeader>
-        <div className="py-4">
-          <p className="text-sm text-muted-foreground">
+          <DialogDescription>
             {t.resetConfirmDialog.message}
-          </p>
-        </div>
+          </DialogDescription>
+        </DialogHeader>
         <DialogFooter>
           <Button
             variant="outline"

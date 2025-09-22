@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,8 +13,9 @@ import { cn } from '@/lib/utils';
 interface TierCustomizationDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (customization: TierCustomization) => void;
+  onSave: (customization: TierCustomization, customTitle?: string) => void;
   initialCustomization: TierCustomization;
+  initialCustomTitle?: string;
 }
 
 const TierCustomizationDialog: React.FC<TierCustomizationDialogProps> = ({
@@ -22,15 +23,18 @@ const TierCustomizationDialog: React.FC<TierCustomizationDialogProps> = ({
   onClose,
   onSave,
   initialCustomization,
+  initialCustomTitle,
 }) => {
   const { t } = useLanguage();
   const [customization, setCustomization] = useState<TierCustomization>({});
+  const [customTitle, setCustomTitle] = useState<string>('');
 
   useEffect(() => {
     if (isOpen) {
       setCustomization(initialCustomization);
+      setCustomTitle(initialCustomTitle || '');
     }
-  }, [isOpen, initialCustomization]);
+  }, [isOpen, initialCustomization, initialCustomTitle]);
 
   const handleTierChange = (tier: string, field: 'displayName' | 'hidden', value: string | boolean) => {
     setCustomization(prev => ({
@@ -43,17 +47,19 @@ const TierCustomizationDialog: React.FC<TierCustomizationDialogProps> = ({
   };
 
   const handleSave = () => {
-    onSave(customization);
+    onSave(customization, customTitle);
     onClose();
   };
 
   const handleCancel = () => {
     setCustomization(initialCustomization);
+    setCustomTitle(initialCustomTitle || '');
     onClose();
   };
 
   const handleReset = () => {
     setCustomization({});
+    setCustomTitle('');
   };
 
   return (
@@ -61,13 +67,41 @@ const TierCustomizationDialog: React.FC<TierCustomizationDialogProps> = ({
       <DialogContent className={cn('sm:max-w-[700px]', COLORS.DARK_BG, COLORS.DARK_BORDER)}>
         <DialogHeader>
           <DialogTitle className={COLORS.TEXT_WHITE}>{t.customizeDialog.title}</DialogTitle>
+          <DialogDescription className={COLORS.TEXT_GRAY}>
+            {t.customizeDialog.description}
+          </DialogDescription>
         </DialogHeader>
         
         <div className="space-y-4 py-4">
+          <div className={cn('p-4 border rounded-lg', COLORS.DARK_BORDER_SECONDARY, COLORS.DARK_BG_SECONDARY)}>
+            <div className="flex items-center gap-4">
+              <div className="flex-shrink-0 w-24">
+                <Label htmlFor="custom-title" className={cn('text-sm font-medium', COLORS.TEXT_GRAY)}>
+                  {t.customizeDialog.customTitle}
+                </Label>
+              </div>
+              <div className="flex-1">
+                <Input
+                  id="custom-title"
+                  value={customTitle}
+                  onChange={(e) => setCustomTitle(e.target.value)}
+                  placeholder={t.title}
+                  className={cn(
+                    'w-full',
+                    COLORS.DARK_BG_SECONDARY,
+                    COLORS.DARK_BORDER_SECONDARY,
+                    COLORS.TEXT_WHITE,
+                    COLORS.TEXT_GRAY_PLACEHOLDER,
+                    'focus-visible:ring-1 focus-visible:ring-blue-800 focus-visible:border-blue-800 focus-visible:ring-offset-1 focus-visible:ring-offset-gray-900',
+                  )}
+                />
+              </div>
+            </div>
+          </div>
           {tiers.map((tier) => (
             <div key={tier} className={cn('p-4 border rounded-lg', COLORS.DARK_BORDER_SECONDARY, COLORS.DARK_BG_SECONDARY)}>
               <div className="flex items-center gap-4">
-                <div className="flex-shrink-0 w-20">
+                <div className="flex-shrink-0 w-24">
                   <Label htmlFor={`${tier}-name`} className={cn('text-sm font-medium', COLORS.TEXT_GRAY)}>
                     {tier} {t.customizeDialog.tierName}
                   </Label>

@@ -41,5 +41,6 @@ export interface TierCustomization {
 export interface TierListData {
   tierAssignments: TierAssignment;
   tierCustomization: TierCustomization;
+  customTitle?: string;
   language: 'en' | 'zh';
 }

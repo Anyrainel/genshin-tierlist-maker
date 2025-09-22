@@ -34,6 +34,7 @@ export interface Translations {
     tierListLoaded: string;
     tierListLoadFailed: string;
     fileReadError: string;
+    customizationsSaved: string;
   };
   resetConfirmDialog: {
     title: string;
@@ -43,6 +44,8 @@ export interface Translations {
   };
   customizeDialog: {
     title: string;
+    description: string;
+    customTitle: string;
     tierName: string;
     hideTier: string;
     save: string;
@@ -87,6 +90,7 @@ export const translations: Record<Language, Translations> = {
       tierListLoaded: 'Tier list loaded successfully',
       tierListLoadFailed: 'Failed to load tier list',
       fileReadError: 'Error reading file',
+      customizationsSaved: 'Customizations saved successfully',
     },
     resetConfirmDialog: {
       title: 'Reset Tier List',
@@ -96,6 +100,8 @@ export const translations: Record<Language, Translations> = {
     },
     customizeDialog: {
       title: 'Customize Tiers',
+      description: 'Customize tier names and visibility settings.',
+      customTitle: 'Tier List Title',
       tierName: 'Tier Name',
       hideTier: 'Hide Tier',
       save: 'Save',
@@ -138,6 +144,7 @@ export const translations: Record<Language, Translations> = {
       tierListLoaded: '加载成功',
       tierListLoadFailed: '加载失败',
       fileReadError: '文件读取错误',
+      customizationsSaved: '自定义设置保存成功',
     },
     resetConfirmDialog: {
       title: '重置强度榜',
@@ -147,7 +154,9 @@ export const translations: Record<Language, Translations> = {
     },
     customizeDialog: {
       title: '自定义强度',
-      tierName: '级名称',
+      description: '自定义强度名称和可见性设置。',
+      customTitle: '榜单标题',
+      tierName: '强度名称',
       hideTier: '隐藏强度',
       save: '保存',
       cancel: '取消',
