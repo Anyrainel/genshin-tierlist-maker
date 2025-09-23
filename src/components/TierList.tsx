@@ -300,7 +300,7 @@ const TierList = () => {
   });
 
   return (
-    <div className="flex flex-col w-full max-w-[90vw] mx-auto py-8 px-4">
+    <div className="flex flex-col w-full min-w-[800px] max-w-[99vw] mx-auto px-16 py-8 max-h-[99vh] overflow-auto">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-4">
           <h1 className="text-3xl font-bold text-gray-200">{customTitle || t.title}</h1>

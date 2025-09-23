@@ -111,7 +111,7 @@ export const translations: Record<Language, Translations> = {
     },
   },
   zh: {
-    title: '原神强度榜工具',
+    title: '原神榜单工具',
     buttons: {
       save: '保存',
       load: '加载',
@@ -138,7 +138,7 @@ export const translations: Record<Language, Translations> = {
       Pool: '角色池',
     },
     messages: {
-      tierListReset: '强度榜已重置',
+      tierListReset: '榜单已重置',
       tierListSaved: '保存成功',
       tierListSaveFailed: '保存失败',
       tierListLoaded: '加载成功',
@@ -147,17 +147,17 @@ export const translations: Record<Language, Translations> = {
       customizationsSaved: '自定义设置保存成功',
     },
     resetConfirmDialog: {
-      title: '重置强度榜',
-      message: '确定要重置强度榜吗？这将删除所有角色分配，且无法撤销。',
+      title: '重置榜单',
+      message: '确定要重置榜单吗？这将删除所有角色分配，且无法撤销。',
       confirm: '重置',
       cancel: '取消',
     },
     customizeDialog: {
-      title: '自定义强度',
-      description: '自定义强度名称和可见性设置。',
+      title: '自定义梯度',
+      description: '自定义梯度名称和可见性设置。',
       customTitle: '榜单标题',
-      tierName: '强度名称',
-      hideTier: '隐藏强度',
+      tierName: '梯度名称',
+      hideTier: '隐藏梯度',
       save: '保存',
       cancel: '取消',
       reset: '重置',
