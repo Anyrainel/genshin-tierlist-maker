@@ -200,7 +200,7 @@ export const useDragAndDrop = ({ onTierAssignment, onRemoveFromTiers }: UseDragA
         dragPreview.style.boxShadow = '0 4px 6px -1px rgb(0 0 0 / 0.1)';
 
         const img = new Image();
-        img.src = character.imageUrl;
+        img.src = character.imagePath;
         img.style.width = '100%';
         img.style.height = '100%';
         img.style.objectFit = 'cover';

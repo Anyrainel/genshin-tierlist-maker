@@ -53,7 +53,7 @@ const TierGrid = ({
           >
             <img
               src={elementImages[element]}
-              className='w-6 h-6 pr-2 brightness-110 contrast-125'
+              className='w-6 h-6 mr-2 brightness-110 contrast-125 object-contain'
             />
             <span className={cn(LAYOUT.LABEL_TEXT, 'text-lg')}>
               {t.elements[element]}

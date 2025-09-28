@@ -48,19 +48,21 @@ const CharacterCard = ({
       data-character-id={character.name}
     >
       <img
-        src={character.imageUrl}
+        src={character.imagePath}
         alt={character.name}
         title={character.name}
         className="w-full h-full object-cover"
         loading="lazy"
       />
       {showWeapons && !isDragging && (
-        <div className="absolute -top-1 -right-1 w-7 h-7 flex items-center justify-center">
-          <img
-            src={weaponImages[character.weapon]}
-            alt={character.weapon}
-            className="w-5 h-5 object-contain filter brightness-110 drop-shadow-lg opacity-80 invert"
-          />
+        <div className="absolute top-0 right-0 w-5 h-5 flex items-center justify-center">
+          <div className="relative bg-black/30 rounded-full backdrop-blur-sm">
+            <img
+              src={weaponImages[character.weapon]}
+              alt={character.weapon}
+              className="w-5 h-5 object-contain filter brightness-125 contrast-150 drop-shadow-lg"
+            />
+          </div>
         </div>
       )}
     </div>

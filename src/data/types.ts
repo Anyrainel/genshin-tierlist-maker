@@ -14,6 +14,7 @@ export type Character = {
   region: Region;
   releaseDate: string; // Format: YYYY-MM-DD
   imageUrl: string;
+  imagePath: string;
 };
 
 export const tiers = ['S', 'A', 'B', 'C', 'D'];

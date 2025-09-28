@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Genshin Impact Character Data Scraper - Fandom Wiki Version
-Scrapes character data from genshin-impact.fandom.com and generates characters.ts file
+Scrapes character data from genshin-impact.fandom.com and generates TypeScript files
 """
 
 import requests
@@ -14,7 +14,9 @@ from datetime import datetime
 # =============================================================================
 
 # Output Configuration
-OUTPUT_FILE = "src/data/characters.ts"  # Path to the generated TypeScript file
+CHARACTERS_OUTPUT_FILE = "src/data/characters.ts"
+ELEMENTS_OUTPUT_FILE = "src/data/elements.ts"
+WEAPONS_OUTPUT_FILE = "src/data/weapons.ts"
 
 # Web Scraping Configuration
 BASE_URL = "https://genshin-impact.fandom.com"
@@ -40,7 +42,7 @@ VALID_REGIONS = ['Mondstadt', 'Liyue', 'Inazuma', 'Sumeru', 'Fontaine', 'Natlan'
 VALID_RARITIES = [4, 5]
 
 # Character Filtering
-SKIP_TRAVELER = True  # Skip Traveler character variants (enabled by default)
+SKIP_TRAVELER = False  # Include Traveler character variants
 
 # =============================================================================
 
@@ -300,9 +302,15 @@ def scrape_element_and_weapon_images():
 
 
 def generate_element_images_file(element_images):
-    """Generate the elements.ts file with element images"""
+    """Generate the elements.ts file with element images and original URLs"""
     ts_content = "import type { Element } from './types';\n\n"
     ts_content += "export const elementImages: Record<Element, string> = {\n"
+    
+    for element, image_url in element_images.items():
+        ts_content += f"  '{element}': '/genshin-tierlist-maker/element/{element.lower()}.png',\n"
+    
+    ts_content += "};\n\n"
+    ts_content += "export const elementOriginalUrls: Record<Element, string> = {\n"
     
     for element, image_url in element_images.items():
         ts_content += f"  '{element}': '{image_url}',\n"
@@ -312,9 +320,15 @@ def generate_element_images_file(element_images):
 
 
 def generate_weapon_images_file(weapon_images):
-    """Generate the weapons.ts file with weapon images"""
+    """Generate the weapons.ts file with weapon images and original URLs"""
     ts_content = "import type { Weapon } from './types';\n\n"
     ts_content += "export const weaponImages: Record<Weapon, string> = {\n"
+    
+    for weapon, image_url in weapon_images.items():
+        ts_content += f"  '{weapon}': '/genshin-tierlist-maker/weapon/{weapon.lower()}.png',\n"
+    
+    ts_content += "};\n\n"
+    ts_content += "export const weaponOriginalUrls: Record<Weapon, string> = {\n"
     
     for weapon, image_url in weapon_images.items():
         ts_content += f"  '{weapon}': '{image_url}',\n"
@@ -332,10 +346,33 @@ def generate_typescript_file(characters):
     ts_content += "export const characters: Character[] = [\n"
     
     for char in characters:
-        ts_content += f"  {{ name: '{char['name']}', element: '{char['element']}', rarity: {char['rarity']}, weapon: '{char['weapon']}', region: '{char['region']}', releaseDate: '{char['releaseDate']}', imageUrl: '{char['imageUrl']}' }},\n"
+        # Generate imagePath from character name
+        image_path = f"/genshin-tierlist-maker/character/{re.sub(r'[^a-z0-9_]', '', char['name'].lower().replace(' ', '_'))}.png"
+        ts_content += f"  {{ name: '{char['name']}', element: '{char['element']}', rarity: {char['rarity']}, weapon: '{char['weapon']}', region: '{char['region']}', releaseDate: '{char['releaseDate']}', imageUrl: '{char['imageUrl']}', imagePath: '{image_path}' }},\n"
     
     ts_content += "];\n"
     return ts_content
+
+
+def get_character_data():
+    """Get character data from Fandom wiki and return it as a dictionary keyed by (element, rarity, name)"""
+    print("Fetching character data from genshin-impact.fandom.com...")
+    
+    characters = scrape_character_data()
+    
+    if not characters:
+        print("No characters found. The website structure may have changed.")
+        return {}
+    
+    print(f"Successfully scraped {len(characters)} characters from Fandom")
+    
+    # Create a lookup dictionary keyed by (element, rarity, name) for easy matching
+    character_lookup = {}
+    for char in characters:
+        key = (char['element'], char['rarity'], char['name'])
+        character_lookup[key] = char
+    
+    return character_lookup
 
 
 def main():
@@ -366,17 +403,17 @@ def main():
     
     # Write files
     try:
-        with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
+        with open(CHARACTERS_OUTPUT_FILE, 'w', encoding='utf-8') as f:
             f.write(characters_ts)
-        print(f"\nSuccessfully generated {OUTPUT_FILE}")
+        print(f"\nSuccessfully generated {CHARACTERS_OUTPUT_FILE}")
         
-        with open("src/data/elements.ts", 'w', encoding='utf-8') as f:
+        with open(ELEMENTS_OUTPUT_FILE, 'w', encoding='utf-8') as f:
             f.write(elements_ts)
-        print("Successfully generated src/data/elements.ts")
+        print(f"Successfully generated {ELEMENTS_OUTPUT_FILE}")
         
-        with open("src/data/weapons.ts", 'w', encoding='utf-8') as f:
+        with open(WEAPONS_OUTPUT_FILE, 'w', encoding='utf-8') as f:
             f.write(weapons_ts)
-        print("Successfully generated src/data/weapons.ts")
+        print(f"Successfully generated {WEAPONS_OUTPUT_FILE}")
         
         # Show summary by element
         element_counts = {}
