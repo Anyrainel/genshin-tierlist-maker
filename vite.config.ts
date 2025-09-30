@@ -4,7 +4,8 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: '/genshin-tierlist-maker/',
+  // Use different base paths based on build target
+  base: mode === 'tauri' ? '/' : '/genshin-tierlist-maker/',
   server: {
     host: "::",
     port: 8080,

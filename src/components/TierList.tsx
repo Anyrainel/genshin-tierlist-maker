@@ -294,7 +294,7 @@ const TierList = () => {
     }
   };
 
-  const { hoveredCardName, hoverDirection, handleDragStart, handleDragOver, handleDrop, handleDragEnd } = useDragAndDrop({
+  const { hoveredCardName, hoverDirection, isDragging, handleDragStart, handleDragOver, handleDrop, handleDragEnd } = useDragAndDrop({
     onTierAssignment: handleTierAssignment,
     onRemoveFromTiers: handleRemoveFromTiers,
   });
@@ -381,6 +381,7 @@ const TierList = () => {
         onRemoveFromTiers={handleRemoveFromTiers}
         hoveredCardName={hoveredCardName}
         hoverDirection={hoverDirection}
+        isDragging={isDragging}
       />
 
       <TierCustomizationDialog

@@ -53,6 +53,7 @@ const CharacterCard = ({
         title={character.name}
         className="w-full h-full object-cover"
         loading="lazy"
+        draggable={false} // Prevent image from being dragged separately
       />
       {showWeapons && !isDragging && (
         <div className="absolute top-0 right-0 w-5 h-5 flex items-center justify-center">
@@ -61,6 +62,7 @@ const CharacterCard = ({
               src={weaponImages[character.weapon]}
               alt={character.weapon}
               className="w-5 h-5 object-contain filter brightness-125 contrast-150 drop-shadow-lg"
+              draggable={false} // Prevent weapon icon from being dragged
             />
           </div>
         </div>

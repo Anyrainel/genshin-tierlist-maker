@@ -1,0 +1,107 @@
+name: Build Tauri Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+      release_notes:
+        description: 'Release notes'
+        required: false
+        default: 'Tauri desktop release'
+
+permissions:
+  contents: write
+
+jobs:
+  build-tauri:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+          
+      - name: Install Tauri CLI
+        run: npm install -g @tauri-apps/cli
+        
+      - name: Update version in package.json
+        run: |
+          $version = "${{ github.event.inputs.version }}"
+          $packageJson = Get-Content package.json | ConvertFrom-Json
+          $packageJson.version = $version.TrimStart('v')
+          $packageJson | ConvertTo-Json -Depth 10 | Set-Content package.json
+          
+      - name: Update version in Tauri config
+        run: |
+          $version = "${{ github.event.inputs.version }}"
+          $tauriConfig = Get-Content src-tauri/tauri.conf.json | ConvertFrom-Json
+          $tauriConfig.version = $version.TrimStart('v')
+          $tauriConfig | ConvertTo-Json -Depth 10 | Set-Content src-tauri/tauri.conf.json
+        
+      - name: Build Tauri app
+        run: npm run tauri:build
+        
+      - name: Create portable executable
+        run: |
+          # Copy the executable to create a portable version
+          $exePath = "src-tauri/target/release/genshin-tierlist-maker.exe"
+          $portablePath = "src-tauri/target/release/Genshin-Tier-List-Maker-Portable-${{ github.event.inputs.version }}.exe"
+          Copy-Item $exePath $portablePath
+        
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          name: Genshin Tier List Maker ${{ github.event.inputs.version }}
+          body: |
+            ## Desktop Release ${{ github.event.inputs.version }}
+            
+            ${{ github.event.inputs.release_notes }}
+            
+            ### Downloads
+            - **Portable Executable**: Download the portable `.exe` file below (recommended)
+            - **Windows Installer**: Download the `.msi` file below
+            - **Windows Setup**: Download the `.exe` setup file below
+            
+            ### Features
+            - Drag and drop character tier management
+            - Save/load tier lists
+            - Multi-language support (English/Chinese)
+            - Offline functionality
+            - Lightweight (~15MB)
+            - **Data persistence**: Your settings and tier lists are saved automatically
+            
+            ### Data Storage
+            - **Portable version**: Data is stored in `%APPDATA%\genshin-tierlist-maker\`
+            - **Installed version**: Data is stored in the same location
+            - **Migration**: Existing localStorage data is automatically migrated on first run
+            
+            ### System Requirements
+            - Windows 10/11
+            - No additional dependencies required
+            
+            ### Updating
+            - Download the new portable executable
+            - Replace the old executable
+            - Your data will be preserved automatically
+          files: |
+            src-tauri/target/release/Genshin-Tier-List-Maker-Portable-${{ github.event.inputs.version }}.exe
+            src-tauri/target/release/bundle/msi/Genshin Tier List Maker_${{ github.event.inputs.version }}_x64_en-US.msi
+            src-tauri/target/release/bundle/nsis/Genshin Tier List Maker_${{ github.event.inputs.version }}_x64-setup.exe
+          draft: false
+          prerelease: false
