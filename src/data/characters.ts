@@ -10,7 +10,8 @@ export const characters: Character[] = [
     "region": "Nod-Krai",
     "releaseDate": "2025-09-10",
     "imageUrl": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/09/4e58c851d6c947865026faa168db83bd_3944254802105067377.png",
-    "imagePath": "/genshin-tierlist-maker/character/aino.png"
+    "imagePath": "/genshin-tierlist-maker/character/aino.png",
+    "nameZh": "爱诺"
   },
   {
     "name": "Lauma",
@@ -20,7 +21,8 @@ export const characters: Character[] = [
     "region": "Nod-Krai",
     "releaseDate": "2025-09-10",
     "imageUrl": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/08/b06e9ff48d57de4856f1a05b1199aae1_8565150401481594895.png",
-    "imagePath": "/genshin-tierlist-maker/character/lauma.png"
+    "imagePath": "/genshin-tierlist-maker/character/lauma.png",
+    "nameZh": "菈乌玛"
   },
   {
     "name": "Ineffa",
@@ -30,7 +32,8 @@ export const characters: Character[] = [
     "region": "Nod-Krai",
     "releaseDate": "2025-07-30",
     "imageUrl": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/07/28/7c221918444852e9a3c2ad609ccacea2_8687518447126752117.png",
-    "imagePath": "/genshin-tierlist-maker/character/ineffa.png"
+    "imagePath": "/genshin-tierlist-maker/character/ineffa.png",
+    "nameZh": "伊涅芙"
   },
   {
     "name": "Dahlia",
@@ -40,7 +43,8 @@ export const characters: Character[] = [
     "region": "Mondstadt",
     "releaseDate": "2025-06-18",
     "imageUrl": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/06/16/255dedc5048565aec2c5af510c6f74a5_7726536808309970424.png",
-    "imagePath": "/genshin-tierlist-maker/character/dahlia.png"
+    "imagePath": "/genshin-tierlist-maker/character/dahlia.png",
+    "nameZh": "塔利雅"
   },
   {
     "name": "Skirk",
@@ -50,7 +54,8 @@ export const characters: Character[] = [
     "region": "None",
     "releaseDate": "2025-06-18",
     "imageUrl": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/06/16/48dba0c10560a3ef573f17d97408b5a0_2527001828446746987.png",
-    "imagePath": "/genshin-tierlist-maker/character/skirk.png"
+    "imagePath": "/genshin-tierlist-maker/character/skirk.png",
+    "nameZh": "丝柯克"
   },
   {
     "name": "Ifa",
@@ -60,7 +65,8 @@ export const characters: Character[] = [
     "region": "Natlan",
     "releaseDate": "2025-05-07",
     "imageUrl": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/04/30/ce693d1e36aef5936b2d2db006605fc4_9036718103340803450.png",
-    "imagePath": "/genshin-tierlist-maker/character/ifa.png"
+    "imagePath": "/genshin-tierlist-maker/character/ifa.png",
+    "nameZh": "伊法"
   },
   {
     "name": "Escoffier",
@@ -70,7 +76,8 @@ export const characters: Character[] = [
     "region": "Fontaine",
     "releaseDate": "2025-05-07",
     "imageUrl": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/04/30/ddbc128157d69479f61747f0918f9e72_2470321636402108639.png",
-    "imagePath": "/genshin-tierlist-maker/character/escoffier.png"
+    "imagePath": "/genshin-tierlist-maker/character/escoffier.png",
+    "nameZh": "爱可菲"
   },
   {
     "name": "Iansan",
@@ -80,7 +87,8 @@ export const characters: Character[] = [
     "region": "Natlan",
     "releaseDate": "2025-03-26",
     "imageUrl": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/03/25/dd9a200a86b792fb1b73ef1ee7de0911_2097378734184941134.png",
-    "imagePath": "/genshin-tierlist-maker/character/iansan.png"
+    "imagePath": "/genshin-tierlist-maker/character/iansan.png",
+    "nameZh": "伊安珊"
   },
   {
     "name": "Varesa",
@@ -90,7 +98,8 @@ export const characters: Character[] = [
     "region": "Natlan",
     "releaseDate": "2025-03-26",
     "imageUrl": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/03/25/a54efe1bb7e82a589b9af44683a696ca_8635138146175164187.png",
-    "imagePath": "/genshin-tierlist-maker/character/varesa.png"
+    "imagePath": "/genshin-tierlist-maker/character/varesa.png",
+    "nameZh": "瓦雷莎"
   },
   {
     "name": "Yumemizuki Mizuki",
@@ -100,7 +109,8 @@ export const characters: Character[] = [
     "region": "Inazuma",
     "releaseDate": "2025-02-12",
     "imageUrl": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/02/08/11662c12fb353d88bd2b20a2726c9f1c_8013472600677983943.png",
-    "imagePath": "/genshin-tierlist-maker/character/yumemizuki_mizuki.png"
+    "imagePath": "/genshin-tierlist-maker/character/yumemizuki_mizuki.png",
+    "nameZh": "梦见月瑞希"
   },
   {
     "name": "Traveler (Pyro)",
@@ -110,7 +120,8 @@ export const characters: Character[] = [
     "region": "None",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/12/30/151578876/75bb898fe1c3b4ed29a2931829ddb845_1306153511401609506.png",
-    "imagePath": "/genshin-tierlist-maker/character/traveler_pyro.png"
+    "imagePath": "/genshin-tierlist-maker/character/traveler_pyro.png",
+    "nameZh": "旅行者（火）"
   },
   {
     "name": "Lan Yan",
@@ -120,7 +131,8 @@ export const characters: Character[] = [
     "region": "Liyue",
     "releaseDate": "2025-01-21",
     "imageUrl": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/01/17/02a299cec38b4ef4f21952c37a624258_5744396397316809821.png",
-    "imagePath": "/genshin-tierlist-maker/character/lan_yan.png"
+    "imagePath": "/genshin-tierlist-maker/character/lan_yan.png",
+    "nameZh": "蓝砚"
   },
   {
     "name": "Citlali",
@@ -130,7 +142,8 @@ export const characters: Character[] = [
     "region": "Natlan",
     "releaseDate": "2025-01-01",
     "imageUrl": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/12/27/c4ab2530bb8bbe3c0e811684f97ec124_6688582217610741079.png",
-    "imagePath": "/genshin-tierlist-maker/character/citlali.png"
+    "imagePath": "/genshin-tierlist-maker/character/citlali.png",
+    "nameZh": "茜特菈莉"
   },
   {
     "name": "Mavuika",
@@ -140,7 +153,8 @@ export const characters: Character[] = [
     "region": "Natlan",
     "releaseDate": "2025-01-01",
     "imageUrl": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/12/30/2f098b1f15854fd9dafc54998795a59e_864981592196815761.png",
-    "imagePath": "/genshin-tierlist-maker/character/mavuika.png"
+    "imagePath": "/genshin-tierlist-maker/character/mavuika.png",
+    "nameZh": "玛薇卡"
   },
   {
     "name": "Chasca",
@@ -150,7 +164,8 @@ export const characters: Character[] = [
     "region": "Natlan",
     "releaseDate": "2024-11-20",
     "imageUrl": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/11/18/abe1192cc7aad45f6b273478dd5fa88a_4799372826012752249.png",
-    "imagePath": "/genshin-tierlist-maker/character/chasca.png"
+    "imagePath": "/genshin-tierlist-maker/character/chasca.png",
+    "nameZh": "恰斯卡"
   },
   {
     "name": "Ororon",
@@ -160,7 +175,8 @@ export const characters: Character[] = [
     "region": "Natlan",
     "releaseDate": "2024-11-20",
     "imageUrl": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/11/18/e4830690f8b6a1ebb02cfbc8ce955671_8091252479018770784.png",
-    "imagePath": "/genshin-tierlist-maker/character/ororon.png"
+    "imagePath": "/genshin-tierlist-maker/character/ororon.png",
+    "nameZh": "欧洛伦"
   },
   {
     "name": "Xilonen",
@@ -170,7 +186,8 @@ export const characters: Character[] = [
     "region": "Natlan",
     "releaseDate": "2024-10-09",
     "imageUrl": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/09/25/b07074c2b9040516fd240b6b8d65c011_2487211347344319683.png",
-    "imagePath": "/genshin-tierlist-maker/character/xilonen.png"
+    "imagePath": "/genshin-tierlist-maker/character/xilonen.png",
+    "nameZh": "希诺宁"
   },
   {
     "name": "Mualani",
@@ -180,7 +197,8 @@ export const characters: Character[] = [
     "region": "Natlan",
     "releaseDate": "2024-08-28",
     "imageUrl": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/26/f4c75caad42923eb91ee760aa2eb473a_7439123622315070718.png",
-    "imagePath": "/genshin-tierlist-maker/character/mualani.png"
+    "imagePath": "/genshin-tierlist-maker/character/mualani.png",
+    "nameZh": "玛拉妮"
   },
   {
     "name": "Kachina",
@@ -190,7 +208,8 @@ export const characters: Character[] = [
     "region": "Natlan",
     "releaseDate": "2024-08-28",
     "imageUrl": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/23/26925adb1092d29c8afdf46d92fad8bd_343637410022641529.png",
-    "imagePath": "/genshin-tierlist-maker/character/kachina.png"
+    "imagePath": "/genshin-tierlist-maker/character/kachina.png",
+    "nameZh": "卡齐娜"
   },
   {
     "name": "Kinich",
@@ -200,7 +219,8 @@ export const characters: Character[] = [
     "region": "Natlan",
     "releaseDate": "2024-09-17",
     "imageUrl": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/09/12/0099e74b4d0c919f6feab4bade3ab748_5795733017114624391.png",
-    "imagePath": "/genshin-tierlist-maker/character/kinich.png"
+    "imagePath": "/genshin-tierlist-maker/character/kinich.png",
+    "nameZh": "基尼奇"
   },
   {
     "name": "Emilie",
@@ -210,7 +230,8 @@ export const characters: Character[] = [
     "region": "Fontaine",
     "releaseDate": "2024-08-06",
     "imageUrl": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/07/31/87ad30965e0c1b45364fdccc51b3429d_6108610286145583716.png",
-    "imagePath": "/genshin-tierlist-maker/character/emilie.png"
+    "imagePath": "/genshin-tierlist-maker/character/emilie.png",
+    "nameZh": "艾梅莉埃"
   },
   {
     "name": "Sethos",
@@ -220,7 +241,8 @@ export const characters: Character[] = [
     "region": "Sumeru",
     "releaseDate": "2024-06-05",
     "imageUrl": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/06/04/35428890/cdb7abfcb86138e5b618946a5466d442_6414132746291261116.png",
-    "imagePath": "/genshin-tierlist-maker/character/sethos.png"
+    "imagePath": "/genshin-tierlist-maker/character/sethos.png",
+    "nameZh": "赛索斯"
   },
   {
     "name": "Sigewinne",
@@ -230,7 +252,8 @@ export const characters: Character[] = [
     "region": "Fontaine",
     "releaseDate": "2024-06-25",
     "imageUrl": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/06/26/35428890/2d607aa4d729030ea04f79919257e311_1172370997840232141.png",
-    "imagePath": "/genshin-tierlist-maker/character/sigewinne.png"
+    "imagePath": "/genshin-tierlist-maker/character/sigewinne.png",
+    "nameZh": "希格雯"
   },
   {
     "name": "Clorinde",
@@ -240,7 +263,8 @@ export const characters: Character[] = [
     "region": "Fontaine",
     "releaseDate": "2024-06-05",
     "imageUrl": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/06/04/35428890/770a66030815971c697ab81bc5436329_1296341861352728851.png",
-    "imagePath": "/genshin-tierlist-maker/character/clorinde.png"
+    "imagePath": "/genshin-tierlist-maker/character/clorinde.png",
+    "nameZh": "克洛琳德"
   },
   {
     "name": "Arlecchino",
@@ -250,7 +274,8 @@ export const characters: Character[] = [
     "region": "Snezhnaya",
     "releaseDate": "2024-04-24",
     "imageUrl": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/04/22/35428890/672e65470bfd14b664596c2a7f7eaaf8_7046130387894981792.png",
-    "imagePath": "/genshin-tierlist-maker/character/arlecchino.png"
+    "imagePath": "/genshin-tierlist-maker/character/arlecchino.png",
+    "nameZh": "阿蕾奇诺"
   },
   {
     "name": "Chiori",
@@ -260,7 +285,8 @@ export const characters: Character[] = [
     "region": "Inazuma",
     "releaseDate": "2024-03-13",
     "imageUrl": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/03/11/35428890/5470f90694af13476e49be7b8346e2b1_5366587928381003654.png",
-    "imagePath": "/genshin-tierlist-maker/character/chiori.png"
+    "imagePath": "/genshin-tierlist-maker/character/chiori.png",
+    "nameZh": "千织"
   },
   {
     "name": "Gaming",
@@ -270,7 +296,8 @@ export const characters: Character[] = [
     "region": "Liyue",
     "releaseDate": "2024-01-31",
     "imageUrl": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/01/29/35428890/b041ad23a9d6245efac952a9379c5114_8939761424130236195.png",
-    "imagePath": "/genshin-tierlist-maker/character/gaming.png"
+    "imagePath": "/genshin-tierlist-maker/character/gaming.png",
+    "nameZh": "嘉明"
   },
   {
     "name": "Xianyun",
@@ -280,7 +307,8 @@ export const characters: Character[] = [
     "region": "Liyue",
     "releaseDate": "2024-01-31",
     "imageUrl": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/01/29/35428890/2c2be27f8876e9435ab8c8b933b8408c_7973851751945394462.png",
-    "imagePath": "/genshin-tierlist-maker/character/xianyun.png"
+    "imagePath": "/genshin-tierlist-maker/character/xianyun.png",
+    "nameZh": "闲云"
   },
   {
     "name": "Chevreuse",
@@ -290,7 +318,8 @@ export const characters: Character[] = [
     "region": "Fontaine",
     "releaseDate": "2024-01-09",
     "imageUrl": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/01/09/35428890/a846729f31f16a987a8696466ebabcc0_6857330048220230431.png",
-    "imagePath": "/genshin-tierlist-maker/character/chevreuse.png"
+    "imagePath": "/genshin-tierlist-maker/character/chevreuse.png",
+    "nameZh": "夏沃蕾"
   },
   {
     "name": "Navia",
@@ -300,7 +329,8 @@ export const characters: Character[] = [
     "region": "Fontaine",
     "releaseDate": "2023-12-20",
     "imageUrl": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2023/12/18/35428890/3fc7580c01a9e622692402889706c4db_8301615651200775487.png",
-    "imagePath": "/genshin-tierlist-maker/character/navia.png"
+    "imagePath": "/genshin-tierlist-maker/character/navia.png",
+    "nameZh": "娜维娅"
   },
   {
     "name": "Charlotte",
@@ -310,7 +340,8 @@ export const characters: Character[] = [
     "region": "Fontaine",
     "releaseDate": "2023-11-08",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/11/06/35428890/7bbbff3f35661a93b5091b1f17fae6c0_6927814687713967999.png",
-    "imagePath": "/genshin-tierlist-maker/character/charlotte.png"
+    "imagePath": "/genshin-tierlist-maker/character/charlotte.png",
+    "nameZh": "夏洛蒂"
   },
   {
     "name": "Furina",
@@ -320,7 +351,8 @@ export const characters: Character[] = [
     "region": "Fontaine",
     "releaseDate": "2023-11-08",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/11/06/35428890/263e5ea0784d182b393f67a7e24146a5_2961704185113948066.png",
-    "imagePath": "/genshin-tierlist-maker/character/furina.png"
+    "imagePath": "/genshin-tierlist-maker/character/furina.png",
+    "nameZh": "芙宁娜"
   },
   {
     "name": "Neuvillette",
@@ -330,7 +362,8 @@ export const characters: Character[] = [
     "region": "Fontaine",
     "releaseDate": "2023-09-27",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/09/26/35428890/0513aa7f482dbb4778545d02f94956fe_7540616405773975535.png",
-    "imagePath": "/genshin-tierlist-maker/character/neuvillette.png"
+    "imagePath": "/genshin-tierlist-maker/character/neuvillette.png",
+    "nameZh": "那维莱特"
   },
   {
     "name": "Wriothesley",
@@ -340,7 +373,8 @@ export const characters: Character[] = [
     "region": "Fontaine",
     "releaseDate": "2023-10-17",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/10/15/35428890/31a0eb2dec5d69ca8dd7616572136b8b_8886987124386670150.png",
-    "imagePath": "/genshin-tierlist-maker/character/wriothesley.png"
+    "imagePath": "/genshin-tierlist-maker/character/wriothesley.png",
+    "nameZh": "莱欧斯利"
   },
   {
     "name": "Traveler (Hydro)",
@@ -350,7 +384,8 @@ export const characters: Character[] = [
     "region": "None",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/11/35428890/75bb898fe1c3b4ed29a2931829ddb845_5786491127494274034.png",
-    "imagePath": "/genshin-tierlist-maker/character/traveler_hydro.png"
+    "imagePath": "/genshin-tierlist-maker/character/traveler_hydro.png",
+    "nameZh": "旅行者（水）"
   },
   {
     "name": "Freminet",
@@ -360,7 +395,8 @@ export const characters: Character[] = [
     "region": "Fontaine",
     "releaseDate": "2023-09-05",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/09/03/35428890/8e44111a378f4e5379b8e7444e8c2daa_4713775899437074849.png",
-    "imagePath": "/genshin-tierlist-maker/character/freminet.png"
+    "imagePath": "/genshin-tierlist-maker/character/freminet.png",
+    "nameZh": "菲米尼"
   },
   {
     "name": "Lyney",
@@ -370,7 +406,8 @@ export const characters: Character[] = [
     "region": "Fontaine",
     "releaseDate": "2023-08-16",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/11/35428890/e343d4442cc3b8e243f0d528bb715f75_1232011243947476013.png",
-    "imagePath": "/genshin-tierlist-maker/character/lyney.png"
+    "imagePath": "/genshin-tierlist-maker/character/lyney.png",
+    "nameZh": "林尼"
   },
   {
     "name": "Lynette",
@@ -380,7 +417,8 @@ export const characters: Character[] = [
     "region": "Fontaine",
     "releaseDate": "2023-08-16",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/08/14/35428890/436e6f2b9b9006bfe511a98093259daf_7192025380861185061.png",
-    "imagePath": "/genshin-tierlist-maker/character/lynette.png"
+    "imagePath": "/genshin-tierlist-maker/character/lynette.png",
+    "nameZh": "琳妮特"
   },
   {
     "name": "Kirara",
@@ -390,7 +428,8 @@ export const characters: Character[] = [
     "region": "Inazuma",
     "releaseDate": "2023-05-24",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/05/23/35428890/d1699810632f8c3bc8c1e8c8beb8250f_3141235252861584883.png",
-    "imagePath": "/genshin-tierlist-maker/character/kirara.png"
+    "imagePath": "/genshin-tierlist-maker/character/kirara.png",
+    "nameZh": "绮良良"
   },
   {
     "name": "Baizhu",
@@ -400,7 +439,8 @@ export const characters: Character[] = [
     "region": "Liyue",
     "releaseDate": "2023-05-02",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/05/02/35428890/05599650d7f42e1c4adde373de6b297d_8001303176243726128.png",
-    "imagePath": "/genshin-tierlist-maker/character/baizhu.png"
+    "imagePath": "/genshin-tierlist-maker/character/baizhu.png",
+    "nameZh": "白术"
   },
   {
     "name": "Kaveh",
@@ -410,7 +450,8 @@ export const characters: Character[] = [
     "region": "Sumeru",
     "releaseDate": "2023-05-02",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/05/02/35428890/2270aba02b92034d7d76b4426be8f53b_7062168821433378650.png",
-    "imagePath": "/genshin-tierlist-maker/character/kaveh.png"
+    "imagePath": "/genshin-tierlist-maker/character/kaveh.png",
+    "nameZh": "卡维"
   },
   {
     "name": "Dehya",
@@ -420,7 +461,8 @@ export const characters: Character[] = [
     "region": "Sumeru",
     "releaseDate": "2023-03-01",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/02/24/35428890/65b22311e1e38ffa45a4928d4005ecee_7076295870986871517.png",
-    "imagePath": "/genshin-tierlist-maker/character/dehya.png"
+    "imagePath": "/genshin-tierlist-maker/character/dehya.png",
+    "nameZh": "迪希雅"
   },
   {
     "name": "Mika",
@@ -430,7 +472,8 @@ export const characters: Character[] = [
     "region": "Mondstadt",
     "releaseDate": "2023-03-21",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/03/21/35428890/da13e3b1a2c6c0e5892b201cec735f9b_6392765476968311284.png",
-    "imagePath": "/genshin-tierlist-maker/character/mika.png"
+    "imagePath": "/genshin-tierlist-maker/character/mika.png",
+    "nameZh": "米卡"
   },
   {
     "name": "Alhaitham",
@@ -440,7 +483,8 @@ export const characters: Character[] = [
     "region": "Sumeru",
     "releaseDate": "2023-01-18",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/01/15/35428890/25249dd20b86c775fb35bdbbd805d9ec_8879881358376735994.png",
-    "imagePath": "/genshin-tierlist-maker/character/alhaitham.png"
+    "imagePath": "/genshin-tierlist-maker/character/alhaitham.png",
+    "nameZh": "艾尔海森"
   },
   {
     "name": "Yaoyao",
@@ -450,7 +494,8 @@ export const characters: Character[] = [
     "region": "Liyue",
     "releaseDate": "2023-01-18",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2023/01/15/35428890/5bc9df1fb67391e4c8080da3d855de53_8974356791001371659.png",
-    "imagePath": "/genshin-tierlist-maker/character/yaoyao.png"
+    "imagePath": "/genshin-tierlist-maker/character/yaoyao.png",
+    "nameZh": "瑶瑶"
   },
   {
     "name": "Wanderer",
@@ -460,7 +505,8 @@ export const characters: Character[] = [
     "region": "Sumeru",
     "releaseDate": "2022-12-07",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/12/05/35428890/24d97a22be742fb732ea96f625d1faac_2495743636540582085.png",
-    "imagePath": "/genshin-tierlist-maker/character/wanderer.png"
+    "imagePath": "/genshin-tierlist-maker/character/wanderer.png",
+    "nameZh": "流浪者"
   },
   {
     "name": "Faruzan",
@@ -470,7 +516,8 @@ export const characters: Character[] = [
     "region": "Sumeru",
     "releaseDate": "2022-12-07",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/12/05/35428890/38c12ab46678a4008f83a0e46c900ef5_528211919348170763.png",
-    "imagePath": "/genshin-tierlist-maker/character/faruzan.png"
+    "imagePath": "/genshin-tierlist-maker/character/faruzan.png",
+    "nameZh": "珐露珊"
   },
   {
     "name": "Layla",
@@ -480,7 +527,8 @@ export const characters: Character[] = [
     "region": "Sumeru",
     "releaseDate": "2022-11-18",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/15/35428890/48a495acadaf37f12d0a7f653d85bd83_7085430198590697354.png",
-    "imagePath": "/genshin-tierlist-maker/character/layla.png"
+    "imagePath": "/genshin-tierlist-maker/character/layla.png",
+    "nameZh": "莱依拉"
   },
   {
     "name": "Nahida",
@@ -490,7 +538,8 @@ export const characters: Character[] = [
     "region": "Sumeru",
     "releaseDate": "2022-11-02",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/10/29/35428890/f29490bddc56b4a6773b6c5003bbb853_9091170755650648414.png",
-    "imagePath": "/genshin-tierlist-maker/character/nahida.png"
+    "imagePath": "/genshin-tierlist-maker/character/nahida.png",
+    "nameZh": "纳西妲"
   },
   {
     "name": "Candace",
@@ -500,7 +549,8 @@ export const characters: Character[] = [
     "region": "Sumeru",
     "releaseDate": "2022-09-28",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/09/28/77454259/2f43da4ece9eabfbde6ec2fcc81b3bff_6412967003441390014.png",
-    "imagePath": "/genshin-tierlist-maker/character/candace.png"
+    "imagePath": "/genshin-tierlist-maker/character/candace.png",
+    "nameZh": "坎蒂丝"
   },
   {
     "name": "Cyno",
@@ -510,7 +560,8 @@ export const characters: Character[] = [
     "region": "Sumeru",
     "releaseDate": "2022-09-28",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/09/28/77454259/e09e2bda5e022611fad0dea1bb6518bb_6757667565719577204.png",
-    "imagePath": "/genshin-tierlist-maker/character/cyno.png"
+    "imagePath": "/genshin-tierlist-maker/character/cyno.png",
+    "nameZh": "赛诺"
   },
   {
     "name": "Nilou",
@@ -520,7 +571,8 @@ export const characters: Character[] = [
     "region": "Sumeru",
     "releaseDate": "2022-10-14",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/10/10/35428890/586d726f9ebda3506c78beaaa41f13b6_5916447718992361520.png",
-    "imagePath": "/genshin-tierlist-maker/character/nilou.png"
+    "imagePath": "/genshin-tierlist-maker/character/nilou.png",
+    "nameZh": "妮露"
   },
   {
     "name": "Traveler (Dendro)",
@@ -530,7 +582,8 @@ export const characters: Character[] = [
     "region": "None",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/23/169177528/04f769b0b1671b5ffbbafefd7286b4b2_4670164833306961502.png",
-    "imagePath": "/genshin-tierlist-maker/character/traveler_dendro.png"
+    "imagePath": "/genshin-tierlist-maker/character/traveler_dendro.png",
+    "nameZh": "旅行者（草）"
   },
   {
     "name": "Dori",
@@ -540,7 +593,8 @@ export const characters: Character[] = [
     "region": "Sumeru",
     "releaseDate": "2022-09-09",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/09/08/35428890/6539bea71efd0f839db897cfc4094362_3469125131800075941.png",
-    "imagePath": "/genshin-tierlist-maker/character/dori.png"
+    "imagePath": "/genshin-tierlist-maker/character/dori.png",
+    "nameZh": "多莉"
   },
   {
     "name": "Collei",
@@ -550,7 +604,8 @@ export const characters: Character[] = [
     "region": "Sumeru",
     "releaseDate": "2022-08-24",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/24/194600931/37a18b6b6865c59063003a9380f08225_7758071773430345954.png",
-    "imagePath": "/genshin-tierlist-maker/character/collei.png"
+    "imagePath": "/genshin-tierlist-maker/character/collei.png",
+    "nameZh": "柯莱"
   },
   {
     "name": "Tighnari",
@@ -560,7 +615,8 @@ export const characters: Character[] = [
     "region": "Sumeru",
     "releaseDate": "2022-08-24",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/08/22/35428890/497dd6fac3d3c652a367c67428550747_306268558608889633.png",
-    "imagePath": "/genshin-tierlist-maker/character/tighnari.png"
+    "imagePath": "/genshin-tierlist-maker/character/tighnari.png",
+    "nameZh": "提纳里"
   },
   {
     "name": "Shikanoin Heizou",
@@ -570,7 +626,8 @@ export const characters: Character[] = [
     "region": "Inazuma",
     "releaseDate": "2022-07-13",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Shikanoin%2520Heizou_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/shikanoin_heizou.png"
+    "imagePath": "/genshin-tierlist-maker/character/shikanoin_heizou.png",
+    "nameZh": "鹿野院平藏"
   },
   {
     "name": "Kuki Shinobu",
@@ -580,7 +637,8 @@ export const characters: Character[] = [
     "region": "Inazuma",
     "releaseDate": "2022-06-21",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Kuki%2520Shinobu_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/kuki_shinobu.png"
+    "imagePath": "/genshin-tierlist-maker/character/kuki_shinobu.png",
+    "nameZh": "久岐忍"
   },
   {
     "name": "Yelan",
@@ -590,7 +648,8 @@ export const characters: Character[] = [
     "region": "Liyue",
     "releaseDate": "2022-05-31",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Yelan_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/yelan.png"
+    "imagePath": "/genshin-tierlist-maker/character/yelan.png",
+    "nameZh": "夜兰"
   },
   {
     "name": "Xiao",
@@ -600,7 +659,8 @@ export const characters: Character[] = [
     "region": "Liyue",
     "releaseDate": "2021-02-03",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Xiao_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/xiao.png"
+    "imagePath": "/genshin-tierlist-maker/character/xiao.png",
+    "nameZh": "魈"
   },
   {
     "name": "Xiangling",
@@ -610,7 +670,8 @@ export const characters: Character[] = [
     "region": "Liyue",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Xiangling_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/xiangling.png"
+    "imagePath": "/genshin-tierlist-maker/character/xiangling.png",
+    "nameZh": "香菱"
   },
   {
     "name": "Raiden Shogun",
@@ -620,7 +681,8 @@ export const characters: Character[] = [
     "region": "Inazuma",
     "releaseDate": "2021-09-01",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Raiden%2520Shogun_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/raiden_shogun.png"
+    "imagePath": "/genshin-tierlist-maker/character/raiden_shogun.png",
+    "nameZh": "雷电将军"
   },
   {
     "name": "Razor",
@@ -630,7 +692,8 @@ export const characters: Character[] = [
     "region": "Mondstadt",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Razor_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/razor.png"
+    "imagePath": "/genshin-tierlist-maker/character/razor.png",
+    "nameZh": "雷泽"
   },
   {
     "name": "Albedo",
@@ -640,7 +703,8 @@ export const characters: Character[] = [
     "region": "Mondstadt",
     "releaseDate": "2020-12-23",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Albedo_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/albedo.png"
+    "imagePath": "/genshin-tierlist-maker/character/albedo.png",
+    "nameZh": "阿贝多"
   },
   {
     "name": "Zhongli",
@@ -650,7 +714,8 @@ export const characters: Character[] = [
     "region": "Liyue",
     "releaseDate": "2020-12-01",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Zhongli_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/zhongli.png"
+    "imagePath": "/genshin-tierlist-maker/character/zhongli.png",
+    "nameZh": "钟离"
   },
   {
     "name": "Chongyun",
@@ -660,7 +725,8 @@ export const characters: Character[] = [
     "region": "Liyue",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Chongyun_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/chongyun.png"
+    "imagePath": "/genshin-tierlist-maker/character/chongyun.png",
+    "nameZh": "重云"
   },
   {
     "name": "Diona",
@@ -670,7 +736,8 @@ export const characters: Character[] = [
     "region": "Mondstadt",
     "releaseDate": "2020-11-11",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Diona_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/diona.png"
+    "imagePath": "/genshin-tierlist-maker/character/diona.png",
+    "nameZh": "迪奥娜"
   },
   {
     "name": "Diluc",
@@ -680,7 +747,8 @@ export const characters: Character[] = [
     "region": "Mondstadt",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Diluc_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/diluc.png"
+    "imagePath": "/genshin-tierlist-maker/character/diluc.png",
+    "nameZh": "迪卢克"
   },
   {
     "name": "Tartaglia",
@@ -690,7 +758,8 @@ export const characters: Character[] = [
     "region": "Snezhnaya",
     "releaseDate": "2020-11-11",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Tartaglia_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/tartaglia.png"
+    "imagePath": "/genshin-tierlist-maker/character/tartaglia.png",
+    "nameZh": "达达利亚"
   },
   {
     "name": "Xinyan",
@@ -700,7 +769,8 @@ export const characters: Character[] = [
     "region": "Liyue",
     "releaseDate": "2020-12-01",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Xinyan_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/xinyan.png"
+    "imagePath": "/genshin-tierlist-maker/character/xinyan.png",
+    "nameZh": "辛焱"
   },
   {
     "name": "Noelle",
@@ -710,7 +780,8 @@ export const characters: Character[] = [
     "region": "Mondstadt",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Noelle_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/noelle.png"
+    "imagePath": "/genshin-tierlist-maker/character/noelle.png",
+    "nameZh": "诺艾尔"
   },
   {
     "name": "Xingqiu",
@@ -720,7 +791,8 @@ export const characters: Character[] = [
     "region": "Liyue",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Xingqiu_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/xingqiu.png"
+    "imagePath": "/genshin-tierlist-maker/character/xingqiu.png",
+    "nameZh": "行秋"
   },
   {
     "name": "Fischl",
@@ -730,7 +802,8 @@ export const characters: Character[] = [
     "region": "Mondstadt",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Fischl_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/fischl.png"
+    "imagePath": "/genshin-tierlist-maker/character/fischl.png",
+    "nameZh": "菲谢尔"
   },
   {
     "name": "Mona",
@@ -740,7 +813,8 @@ export const characters: Character[] = [
     "region": "Mondstadt",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Mona_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/mona.png"
+    "imagePath": "/genshin-tierlist-maker/character/mona.png",
+    "nameZh": "莫娜"
   },
   {
     "name": "Arataki Itto",
@@ -750,7 +824,8 @@ export const characters: Character[] = [
     "region": "Inazuma",
     "releaseDate": "2021-12-14",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Arataki%2520Itto_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/arataki_itto.png"
+    "imagePath": "/genshin-tierlist-maker/character/arataki_itto.png",
+    "nameZh": "荒泷一斗"
   },
   {
     "name": "Barbara",
@@ -760,7 +835,8 @@ export const characters: Character[] = [
     "region": "Mondstadt",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Barbara_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/barbara.png"
+    "imagePath": "/genshin-tierlist-maker/character/barbara.png",
+    "nameZh": "芭芭拉"
   },
   {
     "name": "Hu Tao",
@@ -770,7 +846,8 @@ export const characters: Character[] = [
     "region": "Liyue",
     "releaseDate": "2021-03-02",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Hu%2520Tao_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/hu_tao.png"
+    "imagePath": "/genshin-tierlist-maker/character/hu_tao.png",
+    "nameZh": "胡桃"
   },
   {
     "name": "Rosaria",
@@ -780,7 +857,8 @@ export const characters: Character[] = [
     "region": "Mondstadt",
     "releaseDate": "2021-04-06",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Rosaria_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/rosaria.png"
+    "imagePath": "/genshin-tierlist-maker/character/rosaria.png",
+    "nameZh": "罗莎莉亚"
   },
   {
     "name": "Kamisato Ayaka",
@@ -790,7 +868,8 @@ export const characters: Character[] = [
     "region": "Inazuma",
     "releaseDate": "2021-07-21",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Kamisato%2520Ayaka_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/kamisato_ayaka.png"
+    "imagePath": "/genshin-tierlist-maker/character/kamisato_ayaka.png",
+    "nameZh": "神里绫华"
   },
   {
     "name": "Kamisato Ayato",
@@ -800,7 +879,8 @@ export const characters: Character[] = [
     "region": "Inazuma",
     "releaseDate": "2022-03-30",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Kamisato%2520Ayato_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/kamisato_ayato.png"
+    "imagePath": "/genshin-tierlist-maker/character/kamisato_ayato.png",
+    "nameZh": "神里绫人"
   },
   {
     "name": "Sucrose",
@@ -810,7 +890,8 @@ export const characters: Character[] = [
     "region": "Mondstadt",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Sucrose_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/sucrose.png"
+    "imagePath": "/genshin-tierlist-maker/character/sucrose.png",
+    "nameZh": "砂糖"
   },
   {
     "name": "Shenhe",
@@ -820,7 +901,8 @@ export const characters: Character[] = [
     "region": "Liyue",
     "releaseDate": "2022-01-05",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Shenhe_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/shenhe.png"
+    "imagePath": "/genshin-tierlist-maker/character/shenhe.png",
+    "nameZh": "申鹤"
   },
   {
     "name": "Ganyu",
@@ -830,7 +912,8 @@ export const characters: Character[] = [
     "region": "Liyue",
     "releaseDate": "2021-01-12",
     "imageUrl": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/03/12/35428890/797ded201635d241d358c307e9e7417f_464481961971717418.png",
-    "imagePath": "/genshin-tierlist-maker/character/ganyu.png"
+    "imagePath": "/genshin-tierlist-maker/character/ganyu.png",
+    "nameZh": "甘雨"
   },
   {
     "name": "Jean",
@@ -840,7 +923,8 @@ export const characters: Character[] = [
     "region": "Mondstadt",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Jean_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/jean.png"
+    "imagePath": "/genshin-tierlist-maker/character/jean.png",
+    "nameZh": "琴"
   },
   {
     "name": "Bennett",
@@ -850,7 +934,8 @@ export const characters: Character[] = [
     "region": "Mondstadt",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Bennett_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/bennett.png"
+    "imagePath": "/genshin-tierlist-maker/character/bennett.png",
+    "nameZh": "班尼特"
   },
   {
     "name": "Sangonomiya Kokomi",
@@ -860,7 +945,8 @@ export const characters: Character[] = [
     "region": "Inazuma",
     "releaseDate": "2021-09-21",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Sangonomiya%2520Kokomi_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/sangonomiya_kokomi.png"
+    "imagePath": "/genshin-tierlist-maker/character/sangonomiya_kokomi.png",
+    "nameZh": "珊瑚宫心海"
   },
   {
     "name": "Yanfei",
@@ -870,7 +956,8 @@ export const characters: Character[] = [
     "region": "Liyue",
     "releaseDate": "2021-04-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Yanfei_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/yanfei.png"
+    "imagePath": "/genshin-tierlist-maker/character/yanfei.png",
+    "nameZh": "烟绯"
   },
   {
     "name": "Venti",
@@ -880,7 +967,8 @@ export const characters: Character[] = [
     "region": "Mondstadt",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Venti_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/venti.png"
+    "imagePath": "/genshin-tierlist-maker/character/venti.png",
+    "nameZh": "温迪"
   },
   {
     "name": "Kaedehara Kazuha",
@@ -890,7 +978,8 @@ export const characters: Character[] = [
     "region": "Inazuma",
     "releaseDate": "2021-06-29",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Kaedehara%2520Kazuha_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/kaedehara_kazuha.png"
+    "imagePath": "/genshin-tierlist-maker/character/kaedehara_kazuha.png",
+    "nameZh": "枫原万叶"
   },
   {
     "name": "Sayu",
@@ -900,7 +989,8 @@ export const characters: Character[] = [
     "region": "Inazuma",
     "releaseDate": "2021-08-10",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Sayu_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/sayu.png"
+    "imagePath": "/genshin-tierlist-maker/character/sayu.png",
+    "nameZh": "早柚"
   },
   {
     "name": "Traveler (Anemo)",
@@ -910,7 +1000,8 @@ export const characters: Character[] = [
     "region": "None",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Traveler_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/traveler_anemo.png"
+    "imagePath": "/genshin-tierlist-maker/character/traveler_anemo.png",
+    "nameZh": "旅行者（风）"
   },
   {
     "name": "Traveler (Electro)",
@@ -920,7 +1011,8 @@ export const characters: Character[] = [
     "region": "None",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Traveler_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/traveler_electro.png"
+    "imagePath": "/genshin-tierlist-maker/character/traveler_electro.png",
+    "nameZh": "旅行者（雷）"
   },
   {
     "name": "Traveler (Geo)",
@@ -930,7 +1022,8 @@ export const characters: Character[] = [
     "region": "None",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Traveler_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/traveler_geo.png"
+    "imagePath": "/genshin-tierlist-maker/character/traveler_geo.png",
+    "nameZh": "旅行者（岩）"
   },
   {
     "name": "Thoma",
@@ -940,7 +1033,8 @@ export const characters: Character[] = [
     "region": "Inazuma",
     "releaseDate": "2021-11-02",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Thoma_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/thoma.png"
+    "imagePath": "/genshin-tierlist-maker/character/thoma.png",
+    "nameZh": "托马"
   },
   {
     "name": "Yoimiya",
@@ -950,7 +1044,8 @@ export const characters: Character[] = [
     "region": "Inazuma",
     "releaseDate": "2021-08-10",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Yoimiya_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/yoimiya.png"
+    "imagePath": "/genshin-tierlist-maker/character/yoimiya.png",
+    "nameZh": "宵宫"
   },
   {
     "name": "Amber",
@@ -960,7 +1055,8 @@ export const characters: Character[] = [
     "region": "Mondstadt",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Amber_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/amber.png"
+    "imagePath": "/genshin-tierlist-maker/character/amber.png",
+    "nameZh": "安柏"
   },
   {
     "name": "Aloy",
@@ -970,7 +1066,8 @@ export const characters: Character[] = [
     "region": "None",
     "releaseDate": "2021-09-01",
     "imageUrl": "https://upload-static.hoyoverse.com/hoyolab-wiki/2022/11/19/80830045/1fb2086af3c7933af37eda1ff9084317_163049704110308134.png",
-    "imagePath": "/genshin-tierlist-maker/character/aloy.png"
+    "imagePath": "/genshin-tierlist-maker/character/aloy.png",
+    "nameZh": "埃洛伊"
   },
   {
     "name": "Klee",
@@ -980,7 +1077,8 @@ export const characters: Character[] = [
     "region": "Mondstadt",
     "releaseDate": "2020-10-20",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Klee_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/klee.png"
+    "imagePath": "/genshin-tierlist-maker/character/klee.png",
+    "nameZh": "可莉"
   },
   {
     "name": "Beidou",
@@ -990,7 +1088,8 @@ export const characters: Character[] = [
     "region": "Liyue",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Beidou_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/beidou.png"
+    "imagePath": "/genshin-tierlist-maker/character/beidou.png",
+    "nameZh": "北斗"
   },
   {
     "name": "Keqing",
@@ -1000,7 +1099,8 @@ export const characters: Character[] = [
     "region": "Liyue",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Keqing_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/keqing.png"
+    "imagePath": "/genshin-tierlist-maker/character/keqing.png",
+    "nameZh": "刻晴"
   },
   {
     "name": "Kaeya",
@@ -1010,7 +1110,8 @@ export const characters: Character[] = [
     "region": "Mondstadt",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Kaeya_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/kaeya.png"
+    "imagePath": "/genshin-tierlist-maker/character/kaeya.png",
+    "nameZh": "凯亚"
   },
   {
     "name": "Ningguang",
@@ -1020,7 +1121,8 @@ export const characters: Character[] = [
     "region": "Liyue",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Ningguang_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/ningguang.png"
+    "imagePath": "/genshin-tierlist-maker/character/ningguang.png",
+    "nameZh": "凝光"
   },
   {
     "name": "Yae Miko",
@@ -1030,7 +1132,8 @@ export const characters: Character[] = [
     "region": "Inazuma",
     "releaseDate": "2022-02-16",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Yae%2520Miko_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/yae_miko.png"
+    "imagePath": "/genshin-tierlist-maker/character/yae_miko.png",
+    "nameZh": "八重神子"
   },
   {
     "name": "Eula",
@@ -1040,7 +1143,8 @@ export const characters: Character[] = [
     "region": "Mondstadt",
     "releaseDate": "2021-05-18",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Eula_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/eula.png"
+    "imagePath": "/genshin-tierlist-maker/character/eula.png",
+    "nameZh": "优菈"
   },
   {
     "name": "Gorou",
@@ -1050,7 +1154,8 @@ export const characters: Character[] = [
     "region": "Inazuma",
     "releaseDate": "2021-12-14",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Gorou_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/gorou.png"
+    "imagePath": "/genshin-tierlist-maker/character/gorou.png",
+    "nameZh": "五郎"
   },
   {
     "name": "Yun Jin",
@@ -1060,7 +1165,8 @@ export const characters: Character[] = [
     "region": "Liyue",
     "releaseDate": "2022-01-05",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Yun%2520Jin_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/yun_jin.png"
+    "imagePath": "/genshin-tierlist-maker/character/yun_jin.png",
+    "nameZh": "云堇"
   },
   {
     "name": "Kujou Sara",
@@ -1070,7 +1176,8 @@ export const characters: Character[] = [
     "region": "Inazuma",
     "releaseDate": "2021-09-01",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Kujou%2520Sara_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/kujou_sara.png"
+    "imagePath": "/genshin-tierlist-maker/character/kujou_sara.png",
+    "nameZh": "九条裟罗"
   },
   {
     "name": "Lisa",
@@ -1080,7 +1187,8 @@ export const characters: Character[] = [
     "region": "Mondstadt",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Lisa_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/lisa.png"
+    "imagePath": "/genshin-tierlist-maker/character/lisa.png",
+    "nameZh": "丽莎"
   },
   {
     "name": "Qiqi",
@@ -1090,6 +1198,7 @@ export const characters: Character[] = [
     "region": "Liyue",
     "releaseDate": "2020-09-28",
     "imageUrl": "https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/Qiqi_icon.png",
-    "imagePath": "/genshin-tierlist-maker/character/qiqi.png"
+    "imagePath": "/genshin-tierlist-maker/character/qiqi.png",
+    "nameZh": "七七"
   }
 ];

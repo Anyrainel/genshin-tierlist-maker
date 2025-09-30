@@ -35,6 +35,9 @@ const TierList = () => {
 
     // Process all characters once and group them by tier
     characters.forEach(character => {
+      if (character.name.startsWith("Traveler")) {
+        return;
+      }
       const assignment = tierAssignments[character.name];
       if (assignment) {
         // Character is assigned to a tier - only add if tier is visible
@@ -294,7 +297,7 @@ const TierList = () => {
     }
   };
 
-  const { hoveredCardName, hoverDirection, isDragging, handleDragStart, handleDragOver, handleDrop, handleDragEnd } = useDragAndDrop({
+  const { hoveredCardName, hoverDirection, handleDragStart, handleDragOver, handleDrop, handleDragEnd } = useDragAndDrop({
     onTierAssignment: handleTierAssignment,
     onRemoveFromTiers: handleRemoveFromTiers,
   });
@@ -381,7 +384,6 @@ const TierList = () => {
         onRemoveFromTiers={handleRemoveFromTiers}
         hoveredCardName={hoveredCardName}
         hoverDirection={hoverDirection}
-        isDragging={isDragging}
       />
 
       <TierCustomizationDialog

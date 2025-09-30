@@ -188,23 +188,24 @@ def scroll_until_all_loaded(driver, card_selector, max_scrolls=20):
     
     return final_count
 
-def scrape_characters(driver):
+def scrape_characters(driver, lang="en"):
     """Scrape character data from the wiki"""
-    print("Scraping characters...")
-    
-    character_url = "https://wiki.hoyolab.com/pc/genshin/aggregate/2"
+    print(f"Scraping characters (language: {lang})...")
+
+    # Add language parameter to URL if specified
+    character_url = f"https://wiki.hoyolab.com/pc/genshin/aggregate/2?lang={lang}" if lang != "en" else "https://wiki.hoyolab.com/pc/genshin/aggregate/2"
     driver.get(character_url)
     time.sleep(5)  # Wait longer for page to fully load
-    
+
     # Scroll until all characters are loaded
     scroll_until_all_loaded(driver, "article.character-card")
-    
+
     # Wait for all character images to load
     wait_for_images_to_load(driver, "article.character-card img.d-img-show")
-    
+
     character_cards = driver.find_elements(By.CSS_SELECTOR, "article.character-card")
     print(f"Found {len(character_cards)} character cards")
-    
+
     characters = []
     for i, card in enumerate(character_cards):
         try:
@@ -215,58 +216,77 @@ def scrape_characters(driver):
             except Exception:
                 print(f"Skipping character {i+1}: name not found")
                 continue
-            
+
             try:
                 # Get element from image src
                 element_img = card.find_element(By.CSS_SELECTOR, "img.character-card-element")
                 element_src = element_img.get_attribute("src")
                 element = extract_element_from_src(element_src)
             except Exception:
-                print(f"Skipping {name}: element not found")
+                try:
+                    print(f"Skipping {name}: element not found")
+                except UnicodeEncodeError:
+                    print(f"Skipping character: element not found")
                 continue
-            
+
             try:
                 # Get rarity from class
                 icon_div = card.find_element(By.CSS_SELECTOR, "div.character-card-icon")
                 rarity_classes = icon_div.get_attribute("class")
                 rarity = extract_rarity_from_class(rarity_classes)
                 if rarity is None:
-                    print(f"Skipping {name}: rarity not found")
+                    try:
+                        print(f"Skipping {name}: rarity not found")
+                    except UnicodeEncodeError:
+                        print(f"Skipping character: rarity not found")
                     continue
             except Exception:
-                print(f"Skipping {name}: rarity not found")
+                try:
+                    print(f"Skipping {name}: rarity not found")
+                except UnicodeEncodeError:
+                    print(f"Skipping character: rarity not found")
                 continue
-            
+
             try:
                 # Get character image
                 char_img = card.find_element(By.CSS_SELECTOR, "img.d-img-show")
                 time.sleep(0.1)  # Small delay to ensure image is loaded
                 original_image_url = char_img.get_attribute("src")
-                
+
                 # Double-check that this isn't a placeholder image
                 if any(pattern in original_image_url for pattern in ["avatar.7663739.png", "_nuxt/img/avatar", "placeholder"]):
-                    print(f"ERROR: {name} has placeholder image: {original_image_url}")
+                    try:
+                        print(f"ERROR: {name} has placeholder image: {original_image_url}")
+                    except UnicodeEncodeError:
+                        print(f"ERROR: Character has placeholder image")
                     continue
-                
+
                 cleaned_image_url = clean_image_url(original_image_url)  # Clean the URL
             except Exception as e:
-                print(f"ERROR: {name} - image element not found: {e}")
+                try:
+                    print(f"ERROR: {name} - image element not found: {e}")
+                except UnicodeEncodeError:
+                    print(f"ERROR: Character - image element not found: {e}")
                 continue
-            
+
             character_data = {
                 "name": name,
                 "element": element,
                 "rarity": rarity,
                 "image_url": cleaned_image_url
             }
-            
+
             characters.append(character_data)
-            print(f"Character {i+1}: {name} ({element}, {rarity}*)")
-            
+            # Use encoding-safe print
+            try:
+                print(f"Character {i+1}: {name} ({element}, {rarity}*)")
+            except UnicodeEncodeError:
+                print(f"Character {i+1}: [name with special chars] ({element}, {rarity}*)")
+
         except Exception as e:
             print(f"Error processing character {i+1}: {e}")
             continue
-    
+
     return characters
 
 def scrape_elements_and_weapons(driver):
@@ -366,43 +386,69 @@ def scrape_elements_and_weapons(driver):
     
     return elements, weapons
 
-def enrich_character_data_with_fandom(characters, fandom_data):
-    """Enrich character data with weapon, region, and release date from Fandom data"""
+def enrich_character_data_with_fandom(characters, fandom_data, zh_characters=None):
+    """Enrich character data with weapon, region, release date from Fandom data and Chinese names"""
     enriched_characters = []
-    
+
+    # Create a mapping from English name to Chinese name
+    zh_name_map = {}
+    if zh_characters:
+        for zh_char in zh_characters:
+            # Match by element and rarity to find corresponding English character
+            for en_char in characters:
+                # Approximate matching by position (assuming same order in both lists)
+                # Since we're scraping the same source, order should be preserved
+                pass
+        # Create mapping by index (assuming same order)
+        for i, zh_char in enumerate(zh_characters):
+            if i < len(characters):
+                zh_name_map[characters[i]["name"]] = zh_char["name"]
+
     for char in characters:
         # Try to find matching character in Fandom data by element, rarity, and name
         key = (char["element"], char["rarity"], char["name"])
         fandom_char = fandom_data.get(key)
-        
+
         if fandom_char:
             # Use Fandom data for weapon, region, and release date
             enriched_char = char.copy()
             enriched_char["weapon"] = fandom_char["weapon"]
             enriched_char["region"] = fandom_char["region"]
             enriched_char["releaseDate"] = fandom_char["releaseDate"]
+            # Add Chinese name if available
+            if char["name"] in zh_name_map:
+                enriched_char["nameZh"] = zh_name_map[char["name"]]
             enriched_characters.append(enriched_char)
-            print(f"Enriched {char['name']}: {fandom_char['weapon']}, {fandom_char['region']}, {fandom_char['releaseDate']}")
+            try:
+                print(f"Enriched {char['name']}: {fandom_char['weapon']}, {fandom_char['region']}, {fandom_char['releaseDate']}")
+            except UnicodeEncodeError:
+                print(f"Enriched character: {fandom_char['weapon']}, {fandom_char['region']}, {fandom_char['releaseDate']}")
         else:
             # Use default values if no match found
             enriched_char = char.copy()
             enriched_char["weapon"] = "Sword"  # Default weapon type
             enriched_char["region"] = "None"   # Default region
             enriched_char["releaseDate"] = "2020-09-28"  # Default release date
+            # Add Chinese name if available
+            if char["name"] in zh_name_map:
+                enriched_char["nameZh"] = zh_name_map[char["name"]]
             enriched_characters.append(enriched_char)
-            print(f"Using defaults for {char['name']}: {enriched_char['weapon']}, {enriched_char['region']}, {enriched_char['releaseDate']}")
-    
+            try:
+                print(f"Using defaults for {char['name']}: {enriched_char['weapon']}, {enriched_char['region']}, {enriched_char['releaseDate']}")
+            except UnicodeEncodeError:
+                print(f"Using defaults for character: {enriched_char['weapon']}, {enriched_char['region']}, {enriched_char['releaseDate']}")
+
     return enriched_characters
 
 def save_typescript_data(characters, elements, weapons):
     """Save scraped data in TypeScript format"""
-    
+
     # Create character data
     character_data = []
     for char in characters:
         # Generate imagePath from character name
         image_path = f"/genshin-tierlist-maker/character/{re.sub(r'[^a-z0-9_]', '', char['name'].lower().replace(' ', '_'))}.png"
-        character_data.append({
+        char_obj = {
             "name": char["name"],
             "element": char["element"],
             "rarity": char["rarity"],
@@ -411,7 +457,11 @@ def save_typescript_data(characters, elements, weapons):
             "releaseDate": char["releaseDate"],
             "imageUrl": char["image_url"],
             "imagePath": image_path
-        })
+        }
+        # Add Chinese name if available
+        if "nameZh" in char:
+            char_obj["nameZh"] = char["nameZh"]
+        character_data.append(char_obj)
     
     # Create element data
     element_images = {}
@@ -479,32 +529,35 @@ def main():
     print("=== Genshin Impact Wiki Scraper ===")
     print(f"Skip existing images: {SKIP_EXISTING_IMAGES}")
     print("=" * 40)
-    
+
     # Get Fandom character data first
     print("\nFetching character data from Fandom wiki...")
     fandom_data = get_character_data()
     print(f"Found {len(fandom_data)} characters in Fandom data")
-    
+
     driver = setup_driver()
-    
+
     try:
         # Scrape English data
-        characters = scrape_characters(driver)
-        
+        characters = scrape_characters(driver, lang="en")
+
+        # Scrape Chinese data
+        zh_characters = scrape_characters(driver, lang="zh")
+
         # Scrape elements and weapons
         elements, weapons = scrape_elements_and_weapons(driver)
-        
-        # Enrich character data with Fandom information
-        enriched_characters = enrich_character_data_with_fandom(characters, fandom_data)
-        
+
+        # Enrich character data with Fandom information and Chinese names
+        enriched_characters = enrich_character_data_with_fandom(characters, fandom_data, zh_characters)
+
         # Save TypeScript data files
         save_typescript_data(enriched_characters, elements, weapons)
-        
+
         # Download images
         download_all_images(enriched_characters, elements, weapons)
-        
+
         print("Scraping completed successfully!")
-        
+
     except Exception as e:
         print(f"Error during scraping: {e}")
     finally:

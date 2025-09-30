@@ -19,7 +19,6 @@ interface DropPosition {
 export const useDragAndDrop = ({ onTierAssignment, onRemoveFromTiers }: UseDragAndDropProps) => {
     const [hoveredCardName, setHoveredCardName] = useState<string | null>(null);
     const [hoverDirection, setHoverDirection] = useState<'left' | 'right' | null>(null);
-    const [isDragging, setIsDragging] = useState(false);
 
     // Use ref to track dragged character immediately (synchronous)
     const draggedCharacterRef = useRef<Character | null>(null);
@@ -27,6 +26,7 @@ export const useDragAndDrop = ({ onTierAssignment, onRemoveFromTiers }: UseDragA
     const calculateDropPosition = (e: React.DragEvent): DropPosition => {
         // Use ref for immediate access to dragged character
         const currentDraggedCharacter = draggedCharacterRef.current;
+        // console.log('🔍 CALCULATE DROP POSITION: draggedCharacter =', currentDraggedCharacter);
         if (!currentDraggedCharacter) {
             return { element: null, tier: null, position: null, cardName: null, direction: null };
         }
@@ -174,77 +174,59 @@ export const useDragAndDrop = ({ onTierAssignment, onRemoveFromTiers }: UseDragA
         const direction = dropPoint.x < midX ? 'left' : 'right';
 
         const result = { element: dropElement, tier, position: null, cardName: cardId, direction: direction as 'left' | 'right' };
+        // console.log('✅ CALCULATE: Final result =', result);
         return result;
     };
 
     const handleDragStart = (e: React.DragEvent, character: Character) => {
+        // console.log('🚀 DRAG START:', character.name);
         // Set ref immediately
         draggedCharacterRef.current = character;
-        setIsDragging(true);
+        e.dataTransfer.setData('characterId', character.name);
 
-        // Set basic drag data - use simple text format for better Tauri compatibility
-        try {
-            e.dataTransfer.setData('text/plain', character.name);
-            e.dataTransfer.effectAllowed = 'move';
-        } catch (error) {
-            console.warn('Failed to set drag data:', error);
-        }
+        // Create a drag preview that matches the CharacterCard component
+        const dragPreview = document.createElement('div');
+        dragPreview.style.width = '64px';
+        dragPreview.style.height = '64px';
+        dragPreview.style.borderRadius = '0.375rem';
+        dragPreview.style.overflow = 'hidden';
+        dragPreview.style.backgroundColor = RARITY_COLORS[character.rarity];
+        dragPreview.style.opacity = '0.5';
+        dragPreview.style.transform = 'scale(1.05)';
+        dragPreview.style.position = 'fixed';
+        dragPreview.style.pointerEvents = 'none';
+        dragPreview.style.zIndex = '9999';
+        dragPreview.style.transition = 'all 0.2s';
+        dragPreview.style.boxShadow = '0 4px 6px -1px rgb(0 0 0 / 0.1)';
 
-        // Create a simple drag preview that works in Tauri
-        try {
-            const dragPreview = document.createElement('div');
-            dragPreview.style.width = '64px';
-            dragPreview.style.height = '64px';
-            dragPreview.style.borderRadius = '0.375rem';
-            dragPreview.style.overflow = 'hidden';
-            dragPreview.style.backgroundColor = RARITY_COLORS[character.rarity];
-            dragPreview.style.opacity = '0.8';
-            dragPreview.style.transform = 'scale(1.05)';
-            dragPreview.style.position = 'fixed';
-            dragPreview.style.pointerEvents = 'none';
-            dragPreview.style.zIndex = '9999';
-            dragPreview.style.boxShadow = '0 4px 6px -1px rgb(0 0 0 / 0.1)';
+        const img = new Image();
+        img.src = character.imagePath;
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'cover';
 
-            const img = new Image();
-            img.src = character.imagePath;
-            img.style.width = '100%';
-            img.style.height = '100%';
-            img.style.objectFit = 'cover';
+        dragPreview.appendChild(img);
+        document.body.appendChild(dragPreview);
+        e.dataTransfer.setDragImage(dragPreview, 32, 32);
+        // toast.success(`${character.name} is being dragged`);
 
-            dragPreview.appendChild(img);
-            document.body.appendChild(dragPreview);
-
-            // Use a more compatible drag image approach
-            e.dataTransfer.setDragImage(dragPreview, 32, 32);
-
-            // Clean up the preview element after drag starts
-            setTimeout(() => {
-                if (document.body.contains(dragPreview)) {
-                    document.body.removeChild(dragPreview);
-                }
-            }, 0);
-        } catch (error) {
-            console.warn('Failed to create drag preview:', error);
-            // Continue without custom drag preview
-        }
+        // Clean up the preview element after drag starts
+        setTimeout(() => {
+            if (document.body.contains(dragPreview)) {
+                document.body.removeChild(dragPreview);
+            }
+        }, 0);
     };
 
     const handleDragOver = (e: React.DragEvent) => {
         e.preventDefault();
-
-        // Set drop effect for better visual feedback
-        try {
-            e.dataTransfer.dropEffect = 'move';
-        } catch (error) {
-            // Ignore errors in Tauri environment
-        }
-
         const currentDraggedCharacter = draggedCharacterRef.current;
         if (!currentDraggedCharacter) {
             return;
         }
 
         const dropPos = calculateDropPosition(e);
+        // console.log('🔄 DRAG OVER:', { draggedCharacter: currentDraggedCharacter.name, dropPos });
 
         // Only set hover states if we have both cardId and direction
         if (dropPos.cardName && dropPos.direction) {
@@ -258,54 +240,57 @@ export const useDragAndDrop = ({ onTierAssignment, onRemoveFromTiers }: UseDragA
 
     const handleDrop = (e: React.DragEvent) => {
         e.preventDefault();
-
         const currentDraggedCharacter = draggedCharacterRef.current;
+        // console.log('🎯 DROP START:', currentDraggedCharacter?.name);
         if (!currentDraggedCharacter) {
             return;
         }
-
         const charName = currentDraggedCharacter.name;
+
         const dropPos = calculateDropPosition(e);
+        // console.log('🎯 DROP POSITION:', { charName, dropPos });
 
         if (dropPos.element) {
             // If dropping in the pool, check if it's the correct element section
             if (dropPos.tier === 'Pool') {
                 onRemoveFromTiers(charName);
+                // toast.success(`${charName} moved to Pool`);
             }
                 // Handle different drop positions
             else if (dropPos.position === 'first') {
                 onTierAssignment(charName, null, dropPos.tier, 'left');
+                // toast.success(`${charName} moved to ${dropPos.tier} tier first`);
             }
             else if (dropPos.position === 'last') {
                 onTierAssignment(charName, null, dropPos.tier, 'right');
+                // toast.success(`${charName} moved to ${dropPos.tier} tier last`);
             }
             else if (dropPos.position === 'only') {
                 onTierAssignment(charName, null, dropPos.tier, 'left');
+                // toast.success(`${charName} moved to ${dropPos.tier} tier only`);
             }
             else if (dropPos.cardName && dropPos.direction) {
                 onTierAssignment(charName, dropPos.cardName, dropPos.tier, dropPos.direction);
+                // toast.success(`${charName} moved to ${dropPos.tier} tier, ${dropPos.cardName}'s ${dropPos.direction}`);
             }
         }
 
-        // Reset state
+        // console.log('🧹 DROP: Resetting state');
         setHoveredCardName(null);
         setHoverDirection(null);
         draggedCharacterRef.current = null;
-        setIsDragging(false);
     };
 
     const handleDragEnd = (e: React.DragEvent) => {
-        // Reset state
+        // console.log('🏁 DRAG END: Event triggered');
         setHoveredCardName(null);
         setHoverDirection(null);
         draggedCharacterRef.current = null;
-        setIsDragging(false);
     };
 
     return {
         hoveredCardName,
         hoverDirection,
-        isDragging,
         handleDragStart,
         handleDragOver,
         handleDrop,

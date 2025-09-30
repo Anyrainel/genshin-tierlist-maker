@@ -8,6 +8,7 @@ export type Region = 'Mondstadt' | 'Liyue' | 'Inazuma' | 'Sumeru' | 'Fontaine' |
 
 export type Character = {
   name: string;
+  nameZh: string;
   element: Element;
   rarity: Rarity;
   weapon: Weapon;

@@ -3,10 +3,10 @@ import { cn } from '@/lib/utils';
 import { RARITY_COLORS, LAYOUT } from '../constants/theme';
 import { weaponImages } from '../data/weapons';
 import { useWeaponVisibility } from '../contexts/WeaponVisibilityContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface CharacterCardProps {
   character: Character;
-  isDragging?: boolean;
   draggable?: boolean;
   className?: string;
   hoverDirection?: 'left' | 'right' | null;
@@ -16,8 +16,7 @@ interface CharacterCardProps {
 }
 
 const CharacterCard = ({ 
-  character, 
-  isDragging, 
+  character,
   draggable = true, 
   className,
   hoverDirection = null,
@@ -26,6 +25,7 @@ const CharacterCard = ({
   onDoubleClick
 }: CharacterCardProps) => {
   const { showWeapons } = useWeaponVisibility();
+  const { language } = useLanguage();
   const offset = hoverDirection === 'left' ? 3 : hoverDirection === 'right' ? -3 : 0;
 
   return (
@@ -34,12 +34,11 @@ const CharacterCard = ({
         'w-16 h-16 rounded-md overflow-hidden transition-all relative',
         RARITY_COLORS[character.rarity],
         'cursor-grab active:cursor-grabbing',
-        isDragging ? 'scale-105 opacity-50' : '',
         'hover:scale-105',
         className
       )}
       style={{
-        transform: `translate(${offset}px, 0) ${isDragging ? 'scale(1.05)' : ''}`
+        transform: `translate(${offset}px, 0)`
       }}
       draggable={draggable}
       onDragStart={onDragStart}
@@ -50,12 +49,12 @@ const CharacterCard = ({
       <img
         src={character.imagePath}
         alt={character.name}
-        title={character.name}
+        title={language === 'zh' ? character.nameZh : character.name}
         className="w-full h-full object-cover"
         loading="lazy"
         draggable={false} // Prevent image from being dragged separately
       />
-      {showWeapons && !isDragging && (
+      {showWeapons && (
         <div className="absolute top-0 right-0 w-5 h-5 flex items-center justify-center">
           <div className="relative bg-black/30 rounded-full backdrop-blur-sm">
             <img

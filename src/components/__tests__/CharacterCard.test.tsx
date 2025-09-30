@@ -96,21 +96,6 @@ describe('CharacterCard Component', () => {
     expect(mockOnDoubleClick).toHaveBeenCalled();
   });
 
-  it('should show dragging state when isDragging is true', () => {
-    render(
-      <CharacterCard
-        character={mockCharacter}
-        isDragging={true}
-        onDragStart={mockOnDragStart}
-        onDragEnd={mockOnDragEnd}
-        onDoubleClick={mockOnDoubleClick}
-      />
-    );
-
-    const card = screen.getByRole('generic');
-    expect(card).toHaveClass('scale-105', 'opacity-50');
-  });
-
   it('should show hover direction offset', () => {
     render(
       <CharacterCard

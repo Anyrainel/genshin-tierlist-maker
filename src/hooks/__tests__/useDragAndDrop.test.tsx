@@ -32,7 +32,6 @@ describe('useDragAndDrop Hook', () => {
 
     expect(result.current.hoveredCardName).toBeNull();
     expect(result.current.hoverDirection).toBeNull();
-    expect(result.current.isDragging).toBe(false);
     expect(typeof result.current.handleDragStart).toBe('function');
     expect(typeof result.current.handleDragOver).toBe('function');
     expect(typeof result.current.handleDrop).toBe('function');
@@ -57,7 +56,6 @@ describe('useDragAndDrop Hook', () => {
       result.current.handleDragStart(mockDragEvent as any, mockCharacter);
     });
 
-    expect(result.current.isDragging).toBe(true);
     expect(mockDragEvent.dataTransfer.setData).toHaveBeenCalledWith('text/plain', 'Test Character');
     expect(mockDragEvent.dataTransfer.effectAllowed).toBe('move');
   });
@@ -139,7 +137,6 @@ describe('useDragAndDrop Hook', () => {
       result.current.handleDrop(mockDropEvent as any);
     });
 
-    expect(result.current.isDragging).toBe(false);
     expect(result.current.hoveredCardName).toBeNull();
     expect(result.current.hoverDirection).toBeNull();
   });
@@ -163,8 +160,6 @@ describe('useDragAndDrop Hook', () => {
       result.current.handleDragStart(mockDragStartEvent as any, mockCharacter);
     });
 
-    expect(result.current.isDragging).toBe(true);
-
     // Then end drag
     const mockDragEndEvent = new DragEvent('dragend');
 
@@ -172,7 +167,6 @@ describe('useDragAndDrop Hook', () => {
       result.current.handleDragEnd(mockDragEndEvent as any);
     });
 
-    expect(result.current.isDragging).toBe(false);
     expect(result.current.hoveredCardName).toBeNull();
     expect(result.current.hoverDirection).toBeNull();
   });

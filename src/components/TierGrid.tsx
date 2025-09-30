@@ -19,7 +19,6 @@ interface TierGridProps {
   onRemoveFromTiers: (dragName: string) => void;
   hoveredCardName: string | null;
   hoverDirection: 'left' | 'right' | null;
-  isDragging: boolean;
 }
 
 const TierGrid = ({
@@ -33,7 +32,6 @@ const TierGrid = ({
   onRemoveFromTiers,
   hoveredCardName,
   hoverDirection,
-  isDragging,
 }: TierGridProps) => {
   const { t } = useLanguage();
 
@@ -107,7 +105,6 @@ const TierGrid = ({
                     key={character.name}
                     character={character}
                     draggable={true}
-                    isDragging={isDragging}
                     hoverDirection={hoveredCardName === character.name ? hoverDirection : null}
                     onDragStart={(e) => onDragStart(e, character)}
                     onDragEnd={onDragEnd}
