@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import { vi } from 'vitest';
 import TierList from '../TierList';
 import { LanguageProvider } from '../../contexts/LanguageContext';
@@ -24,6 +24,14 @@ vi.mock('../../data/translations', () => ({
   translations: {
     en: {
       title: 'Genshin Tier List Maker',
+      buttons: {
+        save: 'Save',
+        load: 'Load',
+        reset: 'Reset',
+        showWeapons: 'Show Weapons',
+        hideWeapons: 'Hide Weapons',
+        customize: 'Customize',
+      },
       tiers: {
         S: 'S',
         A: 'A',
@@ -47,6 +55,25 @@ vi.mock('../../data/translations', () => ({
         tierListSaveFailed: 'Failed to save tier list',
         tierListLoadFailed: 'Failed to load tier list',
         fileReadError: 'Error reading file',
+        tierListReset: 'Tier list reset',
+        customizationsSaved: 'Saved',
+      },
+      resetConfirmDialog: {
+        title: 'Reset',
+        message: 'Are you sure?',
+        confirm: 'Reset',
+        cancel: 'Cancel',
+      },
+      customizeDialog: {
+        title: 'Customize',
+        description: 'Customize tiers',
+        customTitle: 'Title',
+        tierName: 'Tier Name',
+        hideTier: 'Hide Tier',
+        save: 'Save',
+        cancel: 'Cancel',
+        reset: 'Reset',
+        defaultPrefix: 'Default: ',
       },
     },
   },
@@ -58,6 +85,7 @@ vi.mock('../../data/characters', () => ({
   characters: [
     {
       name: 'Test Character 1',
+      nameZh: '测试角色1',
       element: 'Pyro',
       weapon: 'Sword',
       rarity: 5,
@@ -68,6 +96,7 @@ vi.mock('../../data/characters', () => ({
     },
     {
       name: 'Test Character 2',
+      nameZh: '测试角色2',
       element: 'Pyro',
       weapon: 'Bow',
       rarity: 4,
@@ -106,9 +135,14 @@ vi.mock('../../data/weapons', () => ({
 }));
 
 // Mock types
-vi.mock('../../data/types', () => ({
-  tiers: ['S', 'A', 'B', 'C', 'D'],
-}));
+vi.mock('../../data/types', async () => {
+  const actual = await vi.importActual<typeof import('../../data/types')>('../../data/types');
+  return {
+    ...actual,
+    tiers: ['S', 'A', 'B', 'C', 'D'],
+    elements: ['Pyro', 'Hydro', 'Electro', 'Cryo', 'Anemo', 'Geo', 'Dendro'],
+  };
+});
 
 const TestWrapper = ({ children }: { children: React.ReactNode }) => (
   <LanguageProvider>
@@ -117,6 +151,32 @@ const TestWrapper = ({ children }: { children: React.ReactNode }) => (
     </WeaponVisibilityProvider>
   </LanguageProvider>
 );
+
+const createDataTransfer = () => new DataTransfer();
+
+const getElementCell = (tier: string, element: string) =>
+  document.querySelector(`[data-tier="${tier}"][data-element="${element}"]`) as HTMLElement | null;
+
+const getCharacterCard = (name: string) =>
+  screen.getByAltText(name).closest('[data-character-id]') as HTMLElement | null;
+
+const mockRect = (element: Element | null, rect: { x?: number; y?: number; width?: number; height?: number }) => {
+  if (!element) return;
+  const { x = 0, y = 0, width = 100, height = 100 } = rect;
+  const domRect = {
+    x,
+    y,
+    width,
+    height,
+    top: y,
+    left: x,
+    right: x + width,
+    bottom: y + height,
+    toJSON: () => ({}),
+  } as DOMRect;
+
+  vi.spyOn(element, 'getBoundingClientRect').mockReturnValue(domRect);
+};
 
 describe('TierList Drag and Drop Integration', () => {
   beforeEach(() => {
@@ -150,44 +210,29 @@ describe('TierList Drag and Drop Integration', () => {
       expect(screen.getByAltText('Test Character 1')).toBeInTheDocument();
     });
 
-    const characterCard = screen.getByAltText('Test Character 1').closest('[data-character-id]');
-    const tierSCell = screen.getByText('S').closest('[data-tier]')?.querySelector('[data-element="Pyro"]');
+    const characterCard = getCharacterCard('Test Character 1');
+    const tierSCell = getElementCell('S', 'Pyro');
 
-    expect(characterCard).toBeInTheDocument();
-    expect(tierSCell).toBeInTheDocument();
+    expect(characterCard).not.toBeNull();
+    expect(tierSCell).not.toBeNull();
 
-    // Simulate drag start
-    const dragStartEvent = new DragEvent('dragstart', {
-      clientX: 100,
-      clientY: 100,
-      target: characterCard,
-    });
+    const cardEl = characterCard!;
+    const tierCellEl = tierSCell!;
 
-    fireEvent(characterCard!, dragStartEvent);
+    mockRect(cardEl, { x: 20, y: 20, width: 64, height: 64 });
+    mockRect(tierCellEl, { x: 200, y: 200, width: 120, height: 120 });
 
-    // Simulate drag over
-    const dragOverEvent = new DragEvent('dragover', {
-      clientX: 150,
-      clientY: 150,
-      target: tierSCell,
-    });
+    const dataTransfer = createDataTransfer();
 
-    fireEvent(tierSCell!, dragOverEvent);
+    fireEvent.dragStart(cardEl, { dataTransfer, clientX: 30, clientY: 30 });
+    fireEvent.dragOver(tierCellEl, { dataTransfer, clientX: 220, clientY: 220 });
+    fireEvent.drop(tierCellEl, { dataTransfer, clientX: 220, clientY: 220 });
+    fireEvent.dragEnd(cardEl, { dataTransfer });
 
-    // Simulate drop
-    const dropEvent = new DragEvent('drop', {
-      clientX: 150,
-      clientY: 150,
-      target: tierSCell,
-    });
-
-    fireEvent(tierSCell!, dropEvent);
-
-    // Check if the character moved to S tier
     await waitFor(() => {
-      // The character should now be in the S tier Pyro section
-      const sTierPyroSection = screen.getByText('S').closest('[data-tier]')?.querySelector('[data-element="Pyro"]');
-      expect(sTierPyroSection).toBeInTheDocument();
+      const updatedTierCell = getElementCell('S', 'Pyro');
+      expect(updatedTierCell).not.toBeNull();
+      expect(within(updatedTierCell as HTMLElement).getByAltText('Test Character 1')).toBeInTheDocument();
     });
   });
 
@@ -202,41 +247,58 @@ describe('TierList Drag and Drop Integration', () => {
       expect(screen.getByAltText('Test Character 1')).toBeInTheDocument();
     });
 
-    const characterCard = screen.getByAltText('Test Character 1').closest('[data-character-id]');
-    const poolCell = screen.getByText('Pool').closest('[data-tier]')?.querySelector('[data-element="Pyro"]');
+    const initialCard = getCharacterCard('Test Character 1');
+    const tierSCell = getElementCell('S', 'Pyro');
 
-    expect(characterCard).toBeInTheDocument();
-    expect(poolCell).toBeInTheDocument();
+    expect(initialCard).not.toBeNull();
+    expect(tierSCell).not.toBeNull();
 
-    // Simulate drag start
-    const dragStartEvent = new DragEvent('dragstart', {
-      clientX: 100,
-      clientY: 100,
-      target: characterCard,
-    });
+    const initialCardEl = initialCard!;
+    const tierSCellEl = tierSCell!;
 
-    fireEvent(characterCard!, dragStartEvent);
+    mockRect(initialCardEl, { x: 20, y: 20, width: 64, height: 64 });
+    mockRect(tierSCellEl, { x: 200, y: 200, width: 120, height: 120 });
 
-    // Simulate drag over pool
-    const dragOverEvent = new DragEvent('dragover', {
-      clientX: 150,
-      clientY: 150,
-      target: poolCell,
-    });
+    const toTierDataTransfer = createDataTransfer();
+    fireEvent.dragStart(initialCardEl, { dataTransfer: toTierDataTransfer, clientX: 30, clientY: 30 });
+    fireEvent.dragOver(tierSCellEl, { dataTransfer: toTierDataTransfer, clientX: 220, clientY: 220 });
+    fireEvent.drop(tierSCellEl, { dataTransfer: toTierDataTransfer, clientX: 220, clientY: 220 });
+    fireEvent.dragEnd(initialCardEl, { dataTransfer: toTierDataTransfer });
 
-    fireEvent(poolCell!, dragOverEvent);
-
-    // Simulate drop in pool
-    const dropEvent = new DragEvent('drop', {
-      clientX: 150,
-      clientY: 150,
-      target: poolCell,
-    });
-
-    fireEvent(poolCell!, dropEvent);
-
-    // Character should remain in pool (this is the default behavior)
     await waitFor(() => {
+      const updatedTierCell = getElementCell('S', 'Pyro');
+      expect(updatedTierCell).not.toBeNull();
+      expect(within(updatedTierCell as HTMLElement).getByAltText('Test Character 1')).toBeInTheDocument();
+    });
+
+    const updatedCard = getCharacterCard('Test Character 1');
+    const poolCell = getElementCell('Pool', 'Pyro');
+    const otherPoolCard = getCharacterCard('Test Character 2');
+
+    expect(updatedCard).not.toBeNull();
+    expect(poolCell).not.toBeNull();
+    expect(otherPoolCard).not.toBeNull();
+
+    const updatedCardEl = updatedCard!;
+    const poolCellEl = poolCell!;
+    const otherPoolCardEl = otherPoolCard!;
+
+    mockRect(updatedCardEl, { x: 210, y: 210, width: 64, height: 64 });
+    mockRect(poolCellEl, { x: 10, y: 10, width: 140, height: 140 });
+    mockRect(otherPoolCardEl, { x: 20, y: 20, width: 64, height: 64 });
+
+    const backToPoolTransfer = createDataTransfer();
+    fireEvent.dragStart(updatedCardEl, { dataTransfer: backToPoolTransfer, clientX: 215, clientY: 215 });
+    fireEvent.dragOver(poolCellEl, { dataTransfer: backToPoolTransfer, clientX: 50, clientY: 130 });
+    fireEvent.drop(poolCellEl, { dataTransfer: backToPoolTransfer, clientX: 50, clientY: 130 });
+    fireEvent.dragEnd(updatedCardEl, { dataTransfer: backToPoolTransfer });
+
+    await waitFor(() => {
+      const refreshedPoolCell = getElementCell('Pool', 'Pyro');
+      const refreshedSTier = getElementCell('S', 'Pyro');
+      expect(refreshedPoolCell).not.toBeNull();
+      expect(refreshedSTier).not.toBeNull();
+      expect(within(refreshedSTier as HTMLElement).queryByAltText('Test Character 1')).not.toBeInTheDocument();
       expect(screen.getByAltText('Test Character 1')).toBeInTheDocument();
     });
   });

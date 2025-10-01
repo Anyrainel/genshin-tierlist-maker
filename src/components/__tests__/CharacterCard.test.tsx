@@ -1,11 +1,15 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import { ReactNode } from 'react';
 import { vi } from 'vitest';
 import CharacterCard from '../CharacterCard';
 import { Character } from '../../data/types';
+import { LanguageProvider } from '../../contexts/LanguageContext';
+import { WeaponVisibilityProvider } from '../../contexts/WeaponVisibilityContext';
 
 // Mock character data
 const mockCharacter: Character = {
   name: 'Test Character',
+  nameZh: '測試角色',
   element: 'Pyro',
   weapon: 'Sword',
   rarity: 5,
@@ -20,12 +24,21 @@ describe('CharacterCard Component', () => {
   const mockOnDragEnd = vi.fn();
   const mockOnDoubleClick = vi.fn();
 
+  const renderWithProviders = (ui: ReactNode) =>
+    render(
+      <LanguageProvider>
+        <WeaponVisibilityProvider>
+          {ui}
+        </WeaponVisibilityProvider>
+      </LanguageProvider>
+    );
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it('should render character card with correct attributes', () => {
-    render(
+    renderWithProviders(
       <CharacterCard
         character={mockCharacter}
         onDragStart={mockOnDragStart}
@@ -34,13 +47,13 @@ describe('CharacterCard Component', () => {
       />
     );
 
-    const card = screen.getByRole('generic');
+    const card = screen.getByAltText('Test Character').closest('[data-character-id]') as HTMLElement;
     expect(card).toHaveAttribute('data-character-id', 'Test Character');
     expect(card).toHaveAttribute('draggable', 'true');
   });
 
   it('should handle drag start event', () => {
-    render(
+    renderWithProviders(
       <CharacterCard
         character={mockCharacter}
         onDragStart={mockOnDragStart}
@@ -49,20 +62,16 @@ describe('CharacterCard Component', () => {
       />
     );
 
-    const card = screen.getByRole('generic');
-    const dragStartEvent = new DragEvent('dragstart', {
-      clientX: 100,
-      clientY: 100,
-      target: card,
-    });
+    const card = screen.getByAltText('Test Character').closest('[data-character-id]') as HTMLElement;
+    const dataTransfer = new DataTransfer();
 
-    fireEvent(card, dragStartEvent);
+    fireEvent.dragStart(card, { dataTransfer });
 
-    expect(mockOnDragStart).toHaveBeenCalledWith(dragStartEvent);
+    expect(mockOnDragStart).toHaveBeenCalled();
   });
 
   it('should handle drag end event', () => {
-    render(
+    renderWithProviders(
       <CharacterCard
         character={mockCharacter}
         onDragStart={mockOnDragStart}
@@ -71,16 +80,15 @@ describe('CharacterCard Component', () => {
       />
     );
 
-    const card = screen.getByRole('generic');
-    const dragEndEvent = new DragEvent('dragend');
+    const card = screen.getByAltText('Test Character').closest('[data-character-id]') as HTMLElement;
 
-    fireEvent(card, dragEndEvent);
+    fireEvent.dragEnd(card);
 
-    expect(mockOnDragEnd).toHaveBeenCalledWith(dragEndEvent);
+    expect(mockOnDragEnd).toHaveBeenCalled();
   });
 
   it('should handle double click event', () => {
-    render(
+    renderWithProviders(
       <CharacterCard
         character={mockCharacter}
         onDragStart={mockOnDragStart}
@@ -89,7 +97,7 @@ describe('CharacterCard Component', () => {
       />
     );
 
-    const card = screen.getByRole('generic');
+    const card = screen.getByAltText('Test Character').closest('[data-character-id]') as HTMLElement;
     
     fireEvent.doubleClick(card);
 
@@ -97,7 +105,7 @@ describe('CharacterCard Component', () => {
   });
 
   it('should show hover direction offset', () => {
-    render(
+    renderWithProviders(
       <CharacterCard
         character={mockCharacter}
         hoverDirection="left"
@@ -107,12 +115,12 @@ describe('CharacterCard Component', () => {
       />
     );
 
-    const card = screen.getByRole('generic');
+    const card = screen.getByAltText('Test Character').closest('[data-character-id]') as HTMLElement;
     expect(card).toHaveStyle('transform: translate(3px, 0)');
   });
 
   it('should disable dragging when draggable is false', () => {
-    render(
+    renderWithProviders(
       <CharacterCard
         character={mockCharacter}
         draggable={false}
@@ -122,12 +130,12 @@ describe('CharacterCard Component', () => {
       />
     );
 
-    const card = screen.getByRole('generic');
+    const card = screen.getByAltText('Test Character').closest('[data-character-id]') as HTMLElement;
     expect(card).toHaveAttribute('draggable', 'false');
   });
 
   it('should render character image with correct attributes', () => {
-    render(
+    renderWithProviders(
       <CharacterCard
         character={mockCharacter}
         onDragStart={mockOnDragStart}
