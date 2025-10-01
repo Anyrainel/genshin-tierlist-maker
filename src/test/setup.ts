@@ -58,99 +58,44 @@ Object.defineProperty(window, '__TAURI__', {
   writable: true,
 });
 
-// Mock DataTransfer for drag and drop testing
+// Lightweight DataTransfer mock for drag and drop testing
 class MockDataTransfer {
   private data: Map<string, string> = new Map();
-  effectAllowed: string = 'uninitialized';
   dropEffect: string = 'none';
+  effectAllowed: string = 'all';
 
-  setData(format: string, data: string): void {
+  setData(format: string, data: string) {
     this.data.set(format, data);
   }
 
-  getData(format: string): string {
-    return this.data.get(format) || '';
+  getData(format: string) {
+    return this.data.get(format) ?? '';
   }
 
-  clearData(): void {
+  clearData() {
     this.data.clear();
   }
 
-  setDragImage(): void {
-    // Mock implementation
+  setDragImage() {
+    // No-op for tests
   }
 }
 
-// Mock DragEvent
-class MockDragEvent extends Event {
+class MockDragEvent extends MouseEvent {
   dataTransfer: MockDataTransfer;
-  clientX: number;
-  clientY: number;
-  target: Element | null;
 
-  constructor(type: string, eventInitDict?: DragEventInit) {
+  constructor(type: string, eventInitDict: DragEventInit = {}) {
     super(type, eventInitDict);
-    this.dataTransfer = new MockDataTransfer();
-    this.clientX = eventInitDict?.clientX || 0;
-    this.clientY = eventInitDict?.clientY || 0;
-    this.target = eventInitDict?.target || null;
+    this.dataTransfer = (eventInitDict.dataTransfer as MockDataTransfer) ?? new MockDataTransfer();
   }
 }
 
-// Add mock to global
-Object.defineProperty(global, 'DragEvent', {
-  value: MockDragEvent,
+Object.defineProperty(globalThis, 'DataTransfer', {
+  value: MockDataTransfer,
   writable: true,
 });
 
-// Mock getBoundingClientRect for testing
-Element.prototype.getBoundingClientRect = vi.fn(() => ({
-  x: 0,
-  y: 0,
-  width: 64,
-  height: 64,
-  top: 0,
-  right: 64,
-  bottom: 64,
-  left: 0,
-  toJSON: () => ({}),
-}));
-
-// Mock closest method
-Element.prototype.closest = vi.fn(function(this: Element, selector: string) {
-  // Simple mock implementation
-  if (selector === '[data-tier]') {
-    return this.closest('[data-tier]') || this;
-  }
-  if (selector === '[data-element]') {
-    return this.closest('[data-element]') || this;
-  }
-  return null;
-});
-
-// Mock querySelectorAll
-Element.prototype.querySelectorAll = vi.fn(function(this: Element, selector: string) {
-  if (selector === '[data-character-id]') {
-    return [] as any;
-  }
-  return [] as any;
-});
-
-// Mock getAttribute
-Element.prototype.getAttribute = vi.fn(function(this: Element, name: string) {
-  if (name === 'data-character-id') {
-    return 'test-character';
-  }
-  if (name === 'data-tier') {
-    return 'S';
-  }
-  if (name === 'data-element') {
-    return 'Pyro';
-  }
-  return null;
-});
-
-// Mock hasAttribute
-Element.prototype.hasAttribute = vi.fn(function(this: Element, name: string) {
-  return name === 'data-character-id';
+Object.defineProperty(globalThis, 'DragEvent', {
+  value: MockDragEvent,
+  writable: true,
 });
