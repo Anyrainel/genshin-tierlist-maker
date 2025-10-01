@@ -30,6 +30,9 @@ jobs:
           
       - name: Install dependencies
         run: npm ci
+
+      - name: Run tests
+        run: npm run test:run
         
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -70,13 +73,11 @@ jobs:
           name: Genshin Tier List Maker ${{ github.event.inputs.version }}
           body: |
             ## Desktop Release ${{ github.event.inputs.version }}
-            
+
             ${{ github.event.inputs.release_notes }}
-            
+
             ### Downloads
             - **Portable Executable**: Download the portable `.exe` file below (recommended)
-            - **Windows Installer**: Download the `.msi` file below
-            - **Windows Setup**: Download the `.exe` setup file below
             
             ### Features
             - Drag and drop character tier management
@@ -88,7 +89,6 @@ jobs:
             
             ### Data Storage
             - **Portable version**: Data is stored in `%APPDATA%\genshin-tierlist-maker\`
-            - **Installed version**: Data is stored in the same location
             - **Migration**: Existing localStorage data is automatically migrated on first run
             
             ### System Requirements
@@ -101,7 +101,5 @@ jobs:
             - Your data will be preserved automatically
           files: |
             src-tauri/target/release/Genshin-Tier-List-Maker-Portable-${{ github.event.inputs.version }}.exe
-            src-tauri/target/release/bundle/msi/Genshin Tier List Maker_${{ github.event.inputs.version }}_x64_en-US.msi
-            src-tauri/target/release/bundle/nsis/Genshin Tier List Maker_${{ github.event.inputs.version }}_x64-setup.exe
           draft: false
           prerelease: false
