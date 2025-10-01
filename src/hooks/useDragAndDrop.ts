@@ -182,44 +182,63 @@ export const useDragAndDrop = ({ onTierAssignment, onRemoveFromTiers }: UseDragA
         // console.log('🚀 DRAG START:', character.name);
         // Set ref immediately
         draggedCharacterRef.current = character;
-        e.dataTransfer.setData('characterId', character.name);
 
-        // Create a drag preview that matches the CharacterCard component
-        const dragPreview = document.createElement('div');
-        dragPreview.style.width = '64px';
-        dragPreview.style.height = '64px';
-        dragPreview.style.borderRadius = '0.375rem';
-        dragPreview.style.overflow = 'hidden';
-        dragPreview.style.backgroundColor = RARITY_COLORS[character.rarity];
-        dragPreview.style.opacity = '0.5';
-        dragPreview.style.transform = 'scale(1.05)';
-        dragPreview.style.position = 'fixed';
-        dragPreview.style.pointerEvents = 'none';
-        dragPreview.style.zIndex = '9999';
-        dragPreview.style.transition = 'all 0.2s';
-        dragPreview.style.boxShadow = '0 4px 6px -1px rgb(0 0 0 / 0.1)';
+        const dataTransfer = e.dataTransfer;
+        if (!dataTransfer) {
+            return;
+        }
 
-        const img = new Image();
-        img.src = character.imagePath;
-        img.style.width = '100%';
-        img.style.height = '100%';
-        img.style.objectFit = 'cover';
+        dataTransfer.setData('characterId', character.name);
+        try {
+            dataTransfer.setData('text/plain', character.name);
+        } catch (error) {
+            // Some environments (older browsers) may throw if the mime type is unsupported
+        }
 
-        dragPreview.appendChild(img);
-        document.body.appendChild(dragPreview);
-        e.dataTransfer.setDragImage(dragPreview, 32, 32);
-        // toast.success(`${character.name} is being dragged`);
+        dataTransfer.effectAllowed = 'move';
+        dataTransfer.dropEffect = 'move';
 
-        // Clean up the preview element after drag starts
-        setTimeout(() => {
-            if (document.body.contains(dragPreview)) {
-                document.body.removeChild(dragPreview);
-            }
-        }, 0);
+        if (typeof dataTransfer.setDragImage === 'function') {
+            // Create a drag preview that matches the CharacterCard component
+            const dragPreview = document.createElement('div');
+            dragPreview.style.width = '64px';
+            dragPreview.style.height = '64px';
+            dragPreview.style.borderRadius = '0.375rem';
+            dragPreview.style.overflow = 'hidden';
+            dragPreview.style.backgroundColor = RARITY_COLORS[character.rarity];
+            dragPreview.style.opacity = '0.5';
+            dragPreview.style.transform = 'scale(1.05)';
+            dragPreview.style.position = 'fixed';
+            dragPreview.style.pointerEvents = 'none';
+            dragPreview.style.zIndex = '9999';
+            dragPreview.style.transition = 'all 0.2s';
+            dragPreview.style.boxShadow = '0 4px 6px -1px rgb(0 0 0 / 0.1)';
+
+            const img = new Image();
+            img.src = character.imagePath;
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+
+            dragPreview.appendChild(img);
+            document.body.appendChild(dragPreview);
+            dataTransfer.setDragImage(dragPreview, 32, 32);
+            // toast.success(`${character.name} is being dragged`);
+
+            // Clean up the preview element after drag starts
+            setTimeout(() => {
+                if (document.body.contains(dragPreview)) {
+                    document.body.removeChild(dragPreview);
+                }
+            }, 0);
+        }
     };
 
     const handleDragOver = (e: React.DragEvent) => {
         e.preventDefault();
+        if (e.dataTransfer) {
+            e.dataTransfer.dropEffect = 'move';
+        }
         const currentDraggedCharacter = draggedCharacterRef.current;
         if (!currentDraggedCharacter) {
             return;
