@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 import { Character, tiers, TierCustomization, TierAssignment, TierListData } from '../data/types';
 import { characters } from '../data/characters';
 import TierGrid from './TierGrid';
@@ -19,6 +19,16 @@ const TierList = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { language, setLanguage, t } = useLanguage();
   const { showWeapons, setShowWeapons } = useWeaponVisibility();
+  const [showTravelers, setShowTravelers] = useState<boolean>(() => {
+    // Try to get traveler visibility from localStorage, default to false (skip travelers)
+    const savedVisibility = localStorage.getItem('tierlist-show-travelers');
+    return savedVisibility === 'true';
+  });
+
+  // Save traveler visibility to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('tierlist-show-travelers', showTravelers.toString());
+  }, [showTravelers]);
 
   // Filter out hidden tiers from allTiers
   const allTiers = useMemo(() => {
@@ -35,7 +45,7 @@ const TierList = () => {
 
     // Process all characters once and group them by tier
     characters.forEach(character => {
-      if (character.name.startsWith("Traveler")) {
+      if (character.name.startsWith("Traveler") && !showTravelers) {
         return;
       }
       const assignment = tierAssignments[character.name];
@@ -67,7 +77,7 @@ const TierList = () => {
     return charactersPerTier;
   };
 
-  const charactersPerTier = useMemo(() => createCharactersPerTierMap(), [tierAssignments, tierCustomization, allTiers]);
+  const charactersPerTier = useMemo(() => createCharactersPerTierMap(), [tierAssignments, tierCustomization, allTiers, showTravelers]);
 
   const handleTierAssignment = (dragName: string, dropName: string | null, tier: string, direction: 'left' | 'right') => {
     setTierAssignments(prev => {
@@ -331,6 +341,14 @@ const TierList = () => {
               className="bg-gray-700 hover:bg-gray-600 text-white border-gray-600"
             >
               {showWeapons ? t.buttons.hideWeapons : t.buttons.showWeapons}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowTravelers(!showTravelers)}
+              className="bg-gray-700 hover:bg-gray-600 text-white border-gray-600"
+            >
+              {showTravelers ? t.buttons.hideTravelers : t.buttons.showTravelers}
             </Button>
           </div>
         </div>

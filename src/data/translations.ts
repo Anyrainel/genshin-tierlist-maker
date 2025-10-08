@@ -8,6 +8,8 @@ export interface Translations {
     reset: string;
     showWeapons: string;
     hideWeapons: string;
+    showTravelers: string;
+    hideTravelers: string;
     customize: string;
   };
   elements: {
@@ -64,6 +66,8 @@ export const translations: Record<Language, Translations> = {
       reset: 'Reset',
       showWeapons: 'Show Weapon Types',
       hideWeapons: 'Hide Weapon Types',
+      showTravelers: 'Show Travelers',
+      hideTravelers: 'Hide Travelers',
       customize: 'Customize',
     },
     elements: {
@@ -118,6 +122,8 @@ export const translations: Record<Language, Translations> = {
       reset: '重置',
       showWeapons: '显示武器类型',
       hideWeapons: '隐藏武器类型',
+      showTravelers: '显示旅行者',
+      hideTravelers: '隐藏旅行者',
       customize: '自定义',
     },
     elements: {
