@@ -192,8 +192,8 @@ def scrape_characters(driver, lang="en"):
     """Scrape character data from the wiki"""
     print(f"Scraping characters (language: {lang})...")
 
-    # Add language parameter to URL if specified
-    character_url = f"https://wiki.hoyolab.com/pc/genshin/aggregate/2?lang={lang}" if lang != "en" else "https://wiki.hoyolab.com/pc/genshin/aggregate/2"
+    # Always add language parameter to URL for consistency
+    character_url = f"https://wiki.hoyolab.com/pc/genshin/aggregate/2?lang={lang}"
     driver.get(character_url)
     time.sleep(5)  # Wait longer for page to fully load
 
@@ -289,11 +289,12 @@ def scrape_characters(driver, lang="en"):
 
     return characters
 
-def scrape_elements_and_weapons(driver):
+def scrape_elements_and_weapons(driver, lang="en"):
     """Scrape element and weapon images from the character page filters"""
-    print("Scraping elements and weapons...")
-    
-    character_url = "https://wiki.hoyolab.com/pc/genshin/aggregate/2"
+    print(f"Scraping elements and weapons (language: {lang})...")
+
+    # Always add language parameter to URL for consistency
+    character_url = f"https://wiki.hoyolab.com/pc/genshin/aggregate/2?lang={lang}"
     driver.get(character_url)
     time.sleep(5)  # Wait for page to load
     
@@ -545,7 +546,7 @@ def main():
         zh_characters = scrape_characters(driver, lang="zh")
 
         # Scrape elements and weapons
-        elements, weapons = scrape_elements_and_weapons(driver)
+        elements, weapons = scrape_elements_and_weapons(driver, lang="en")
 
         # Enrich character data with Fandom information and Chinese names
         enriched_characters = enrich_character_data_with_fandom(characters, fandom_data, zh_characters)

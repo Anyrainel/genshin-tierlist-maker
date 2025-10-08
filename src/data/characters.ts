@@ -3,6 +3,17 @@ import type { Character } from './types';
 // Generated character list with data from Hoyolab wiki
 export const characters: Character[] = [
   {
+    "name": "Flins",
+    "element": "Electro",
+    "rarity": 5,
+    "weapon": "Polearm",
+    "region": "Nod-Krai",
+    "releaseDate": "2025-09-30",
+    "imageUrl": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/09/29/35428890/f6feccecc61d2bf772461f057dfb41cd_5944664216414192017.png",
+    "imagePath": "/genshin-tierlist-maker/character/flins.png",
+    "nameZh": "菲林斯"
+  },
+  {
     "name": "Aino",
     "element": "Hydro",
     "rarity": 4,
