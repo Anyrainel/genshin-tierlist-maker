@@ -19,6 +19,18 @@ import re
 # Global configuration flags
 SKIP_EXISTING_IMAGES = True  # Set to False to re-download all images
 
+# Pre-compiled patterns for better performance
+PLACEHOLDER_PATTERNS = ["avatar.7663739.png", "_nuxt/img/avatar"]
+
+
+def safe_print(message, fallback_message="Character processing error"):
+    """Safely print message with Unicode encoding fallback"""
+    try:
+        print(message)
+    except UnicodeEncodeError:
+        print(fallback_message)
+
+
 def setup_driver():
     """Setup Chrome driver with proper options for scraping"""
     chrome_options = Options()
@@ -35,22 +47,23 @@ def setup_driver():
 
 def extract_element_from_src(src):
     """Extract element type from image src URL"""
-    if "pyro" in src.lower():
-        return "Pyro"
-    elif "hydro" in src.lower():
-        return "Hydro"
-    elif "electro" in src.lower():
-        return "Electro"
-    elif "cryo" in src.lower():
-        return "Cryo"
-    elif "anemo" in src.lower():
-        return "Anemo"
-    elif "geo" in src.lower():
-        return "Geo"
-    elif "dendro" in src.lower():
-        return "Dendro"
-    else:
-        return "Pyro"  # Default fallback
+    element_mapping = {
+        "pyro": "Pyro",
+        "hydro": "Hydro",
+        "electro": "Electro",
+        "cryo": "Cryo",
+        "anemo": "Anemo",
+        "geo": "Geo",
+        "dendro": "Dendro",
+    }
+
+    src_lower = src.lower()
+    for element_key, element_name in element_mapping.items():
+        if element_key in src_lower:
+            return element_name
+
+    return "Pyro"  # Default fallback
+
 
 def extract_rarity_from_class(class_str):
     """Extract rarity from CSS class"""
@@ -61,19 +74,20 @@ def extract_rarity_from_class(class_str):
     else:
         return None  # Skip if neither level found
 
+
 def download_image(url, filepath):
     """Download an image from URL to filepath"""
     # Check if image already exists and skip flag is enabled
     if SKIP_EXISTING_IMAGES and os.path.exists(filepath):
         print(f"Skipping existing image: {os.path.basename(filepath)}")
         return True
-    
+
     try:
         response = requests.get(url, timeout=30)
         response.raise_for_status()
-        
+
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
-        with open(filepath, 'wb') as f:
+        with open(filepath, "wb") as f:
             f.write(response.content)
         print(f"Downloaded: {os.path.basename(filepath)}")
         return True
@@ -81,28 +95,24 @@ def download_image(url, filepath):
         print(f"Failed to download image {url}: {e}")
         return False
 
+
 def clean_image_url(url):
     """Clean image URL by removing query parameters and ensuring .png extension"""
     if not url:
         return url
-    
+
     # Remove query parameters (everything after ?)
-    if '?' in url:
-        url = url.split('?')[0]
-    
+    if "?" in url:
+        url = url.split("?")[0]
+
     return url
+
 
 def wait_for_images_to_load(driver, selector, max_wait=30):
     """Wait for all images to load and replace placeholder URLs"""
     print("Waiting for images to load...")
-    
+
     start_time = time.time()
-    placeholder_patterns = [
-        "avatar.7663739.png",  # Generic placeholder
-        "_nuxt/img/avatar",    # Nuxt placeholder pattern
-        "placeholder",          # Generic placeholder keyword
-        "default-avatar",       # Default avatar pattern
-    ]
     
     while time.time() - start_time < max_wait:
         # Find all images with the selector
@@ -115,7 +125,7 @@ def wait_for_images_to_load(driver, selector, max_wait=30):
         for img in images:
             src = img.get_attribute("src")
             if src:
-                for pattern in placeholder_patterns:
+                for pattern in PLACEHOLDER_PATTERNS:
                     if pattern in src:
                         placeholder_found = True
                         placeholder_count += 1
@@ -195,7 +205,7 @@ def scrape_characters(driver, lang="en"):
     # Always add language parameter to URL for consistency
     character_url = f"https://wiki.hoyolab.com/pc/genshin/aggregate/2?lang={lang}"
     driver.get(character_url)
-    time.sleep(5)  # Wait longer for page to fully load
+    time.sleep(2)
 
     # Scroll until all characters are loaded
     scroll_until_all_loaded(driver, "article.character-card")
@@ -209,65 +219,43 @@ def scrape_characters(driver, lang="en"):
     characters = []
     for i, card in enumerate(character_cards):
         try:
-            # Extract character data with error handling for each element
-            try:
-                name_element = card.find_element(By.CSS_SELECTOR, "div.character-card-name span")
-                name = name_element.text.strip()
-            except Exception:
-                print(f"Skipping character {i+1}: name not found")
+            # Extract name
+            name_element = card.find_element(
+                By.CSS_SELECTOR, "div.character-card-name span"
+            )
+            name = name_element.text.strip()
+
+            # Extract element
+            element_img = card.find_element(
+                By.CSS_SELECTOR, "img.character-card-element"
+            )
+            element_src = element_img.get_attribute("src")
+            element = extract_element_from_src(element_src)
+
+            # Extract rarity
+            icon_div = card.find_element(By.CSS_SELECTOR, "div.character-card-icon")
+            rarity_classes = icon_div.get_attribute("class")
+            rarity = extract_rarity_from_class(rarity_classes)
+            if rarity is None:
+                safe_print(
+                    f"Skipping {name}: rarity not found",
+                    f"Skipping character {i + 1}: rarity not found",
+                )
                 continue
 
-            try:
-                # Get element from image src
-                element_img = card.find_element(By.CSS_SELECTOR, "img.character-card-element")
-                element_src = element_img.get_attribute("src")
-                element = extract_element_from_src(element_src)
-            except Exception:
-                try:
-                    print(f"Skipping {name}: element not found")
-                except UnicodeEncodeError:
-                    print(f"Skipping character: element not found")
+            # Extract character image
+            char_img = card.find_element(By.CSS_SELECTOR, "img.d-img-show")
+            original_image_url = char_img.get_attribute("src")
+
+            # Check for placeholder image
+            if any(pattern in original_image_url for pattern in PLACEHOLDER_PATTERNS):
+                safe_print(
+                    f"ERROR: {name} has placeholder image: {original_image_url}",
+                    f"ERROR: Character {i + 1} has placeholder image",
+                )
                 continue
 
-            try:
-                # Get rarity from class
-                icon_div = card.find_element(By.CSS_SELECTOR, "div.character-card-icon")
-                rarity_classes = icon_div.get_attribute("class")
-                rarity = extract_rarity_from_class(rarity_classes)
-                if rarity is None:
-                    try:
-                        print(f"Skipping {name}: rarity not found")
-                    except UnicodeEncodeError:
-                        print(f"Skipping character: rarity not found")
-                    continue
-            except Exception:
-                try:
-                    print(f"Skipping {name}: rarity not found")
-                except UnicodeEncodeError:
-                    print(f"Skipping character: rarity not found")
-                continue
-
-            try:
-                # Get character image
-                char_img = card.find_element(By.CSS_SELECTOR, "img.d-img-show")
-                time.sleep(0.1)  # Small delay to ensure image is loaded
-                original_image_url = char_img.get_attribute("src")
-
-                # Double-check that this isn't a placeholder image
-                if any(pattern in original_image_url for pattern in ["avatar.7663739.png", "_nuxt/img/avatar", "placeholder"]):
-                    try:
-                        print(f"ERROR: {name} has placeholder image: {original_image_url}")
-                    except UnicodeEncodeError:
-                        print(f"ERROR: Character has placeholder image")
-                    continue
-
-                cleaned_image_url = clean_image_url(original_image_url)  # Clean the URL
-            except Exception as e:
-                try:
-                    print(f"ERROR: {name} - image element not found: {e}")
-                except UnicodeEncodeError:
-                    print(f"ERROR: Character - image element not found: {e}")
-                continue
+            cleaned_image_url = clean_image_url(original_image_url)
 
             character_data = {
                 "name": name,
@@ -277,14 +265,16 @@ def scrape_characters(driver, lang="en"):
             }
 
             characters.append(character_data)
-            # Use encoding-safe print
-            try:
-                print(f"Character {i+1}: {name} ({element}, {rarity}*)")
-            except UnicodeEncodeError:
-                print(f"Character {i+1}: [name with special chars] ({element}, {rarity}*)")
+            safe_print(
+                f"Character {i + 1}: {name} ({element}, {rarity}*)",
+                f"Character {i + 1}: [name with special chars] ({element}, {rarity}*)",
+            )
 
         except Exception as e:
-            print(f"Error processing character {i+1}: {e}")
+            safe_print(
+                f"Error processing character {i + 1}: {e}",
+                f"Error processing character {i + 1}",
+            )
             continue
 
     return characters
@@ -296,7 +286,7 @@ def scrape_elements_and_weapons(driver, lang="en"):
     # Always add language parameter to URL for consistency
     character_url = f"https://wiki.hoyolab.com/pc/genshin/aggregate/2?lang={lang}"
     driver.get(character_url)
-    time.sleep(5)  # Wait for page to load
+    time.sleep(3)
     
     elements = []
     weapons = []
