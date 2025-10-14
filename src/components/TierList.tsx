@@ -1,5 +1,5 @@
 import { useState, useRef, useMemo, useEffect } from 'react';
-import { Character, tiers, TierCustomization, TierAssignment, TierListData } from '../data/types';
+import { Character, tiers, TierCustomization, TierListData } from '../data/types';
 import { characters } from '../data/characters';
 import TierGrid from './TierGrid';
 import TierCustomizationDialog from './TierCustomizationDialog';
@@ -9,11 +9,19 @@ import { toast } from 'sonner';
 import { useDragAndDrop } from '../hooks/useDragAndDrop';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useWeaponVisibility } from '../contexts/WeaponVisibilityContext';
+import { useTierListStore } from '../stores/useTierListStore';
 
 const TierList = () => {
-  const [tierAssignments, setTierAssignments] = useState<TierAssignment>({});
-  const [tierCustomization, setTierCustomization] = useState<TierCustomization>({});
-  const [customTitle, setCustomTitle] = useState<string>('');
+  // Use Zustand store for persisted state
+  const tierAssignments = useTierListStore((state) => state.tierAssignments);
+  const tierCustomization = useTierListStore((state) => state.tierCustomization);
+  const customTitle = useTierListStore((state) => state.customTitle);
+  const setTierAssignments = useTierListStore((state) => state.setTierAssignments);
+  const setTierCustomization = useTierListStore((state) => state.setTierCustomization);
+  const setCustomTitle = useTierListStore((state) => state.setCustomTitle);
+  const resetStoredTierList = useTierListStore((state) => state.resetTierList);
+  const loadTierListData = useTierListStore((state) => state.loadTierListData);
+
   const [isCustomizeDialogOpen, setIsCustomizeDialogOpen] = useState(false);
   const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -191,7 +199,7 @@ const TierList = () => {
   };
 
   const resetTierList = () => {
-    setTierAssignments({});
+    resetStoredTierList();
     toast.info(t.messages.tierListReset);
   };
 
@@ -290,9 +298,11 @@ const TierList = () => {
 
     try {
       const loadedData = await loadTierList(file);
-      setTierAssignments(loadedData.tierAssignments);
-      setTierCustomization(loadedData.tierCustomization);
-      setCustomTitle(loadedData.customTitle || '');
+      loadTierListData({
+        tierAssignments: loadedData.tierAssignments,
+        tierCustomization: loadedData.tierCustomization,
+        customTitle: loadedData.customTitle || '',
+      });
       // Update language if it was different in the loaded file
       if (loadedData.language !== language) {
         setLanguage(loadedData.language);
