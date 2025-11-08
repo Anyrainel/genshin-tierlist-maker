@@ -3,6 +3,17 @@ import type { Character } from './types';
 // Generated character list with data from Hoyolab wiki
 export const characters: Character[] = [
   {
+    "name": "Nefer",
+    "element": "Dendro",
+    "rarity": 5,
+    "weapon": "Catalyst",
+    "region": "Nod-Krai",
+    "releaseDate": "2025-10-22",
+    "imageUrl": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/10/21/7557acebcb72b4d9912bcb0e6c92306a_3655566527985254987.png",
+    "imagePath": "/genshin-tierlist-maker/character/nefer.png",
+    "nameZh": "奈芙尔"
+  },
+  {
     "name": "Flins",
     "element": "Electro",
     "rarity": 5,
