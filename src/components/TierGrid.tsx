@@ -6,16 +6,14 @@ import { TIER_COLORS, TIER_BG_COLORS, ELEMENT_COLORS, LAYOUT } from '../constant
 import { elements } from '../data/types';
 import { elementImages } from '../data/elements';
 import { useLanguage } from '../contexts/LanguageContext';
+import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable';
+import { useDroppable } from '@dnd-kit/core';
 
 
 interface TierGridProps {
   allTiers: string[];
   charactersPerTier: { [tier: string]: Character[] };
   tierCustomization: TierCustomization;
-  onDragStart: (e: React.DragEvent, character: Character) => void;
-  onDragOver: (e: React.DragEvent) => void;
-  onDrop: (e: React.DragEvent) => void;
-  onDragEnd: (e: React.DragEvent) => void;
   onRemoveFromTiers: (dragName: string) => void;
   hoveredCardName: string | null;
   hoverDirection: 'left' | 'right' | null;
@@ -25,10 +23,6 @@ const TierGrid = ({
   allTiers,
   charactersPerTier,
   tierCustomization,
-  onDragStart,
-  onDragOver,
-  onDrop,
-  onDragEnd,
   onRemoveFromTiers,
   hoveredCardName,
   hoverDirection,
@@ -64,6 +58,50 @@ const TierGrid = ({
     );
   };
 
+  // Component for each droppable cell (tier-element combination)
+  const TierElementCell = ({ tier, element, characters }: { tier: string; element: string; characters: Character[] }) => {
+    const cellId = `${tier}-${element}`;
+    const { setNodeRef } = useDroppable({
+      id: cellId,
+      data: { tier, element },
+    });
+
+    // Filter characters for this element
+    const cellCharacters = characters.filter((char) => char.element === element);
+
+    // Create sorted array of IDs for this cell
+    const itemIds = cellCharacters.map(char => `${tier}-${element}-${char.name}`);
+
+    return (
+      <div
+        ref={setNodeRef}
+        key={cellId}
+        className={cn(
+          'p-2',
+          LAYOUT.MIN_ROW_HEIGHT,
+          TIER_BG_COLORS[tier as keyof typeof TIER_BG_COLORS],
+          LAYOUT.GRID_BORDER,
+        )}
+        data-tier={tier}
+        data-element={element}
+      >
+        <SortableContext items={itemIds} strategy={horizontalListSortingStrategy}>
+          <div className='flex flex-wrap justify-center gap-2'>
+            {cellCharacters.map((character) => (
+              <CharacterCard
+                key={character.name}
+                character={character}
+                tier={tier}
+                hoverDirection={hoveredCardName === character.name ? hoverDirection : null}
+                onDoubleClick={() => onRemoveFromTiers(character.name)}
+              />
+            ))}
+          </div>
+        </SortableContext>
+      </div>
+    );
+  };
+
   const TierRow = ({ tier, characters }: { tier: string; characters: Character[] }) => {
     const customName = tierCustomization[tier]?.displayName;
     const displayName = customName || t.tiers[tier as keyof typeof t.tiers] || tier;
@@ -84,35 +122,12 @@ const TierGrid = ({
           </span>
         </div>
         {elements.map((element) => (
-          <div
+          <TierElementCell
             key={`${tier}-${element}`}
-            className={cn(
-              'p-2',
-              LAYOUT.MIN_ROW_HEIGHT,
-              TIER_BG_COLORS[tier as keyof typeof TIER_BG_COLORS],
-              LAYOUT.GRID_BORDER,
-            )}
-            data-tier={tier}
-            data-element={element}
-            onDragOver={onDragOver}
-            onDrop={onDrop}
-          >
-            <div className='flex flex-wrap justify-center gap-2'>
-              {characters
-                .filter((char) => char.element === element)
-                .map((character) => (
-                  <CharacterCard
-                    key={character.name}
-                    character={character}
-                    draggable={true}
-                    hoverDirection={hoveredCardName === character.name ? hoverDirection : null}
-                    onDragStart={(e) => onDragStart(e, character)}
-                    onDragEnd={onDragEnd}
-                    onDoubleClick={() => onRemoveFromTiers(character.name)}
-                  />
-                ))}
-            </div>
-          </div>
+            tier={tier}
+            element={element}
+            characters={characters}
+          />
         ))}
       </React.Fragment>
     );

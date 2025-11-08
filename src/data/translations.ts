@@ -37,6 +37,9 @@ export interface Translations {
     tierListLoadFailed: string;
     fileReadError: string;
     customizationsSaved: string;
+    autoSaved: string;
+    characterMoved: (charName: string, tier: string) => string;
+    characterRemoved: (charName: string) => string;
   };
   resetConfirmDialog: {
     title: string;
@@ -95,6 +98,9 @@ export const translations: Record<Language, Translations> = {
       tierListLoadFailed: 'Failed to load tier list',
       fileReadError: 'Error reading file',
       customizationsSaved: 'Customizations saved successfully',
+      autoSaved: 'Auto-saved',
+      characterMoved: (charName: string, tier: string) => `Auto-saved: ${charName} → ${tier}`,
+      characterRemoved: (charName: string) => `Auto-saved: ${charName} removed`,
     },
     resetConfirmDialog: {
       title: 'Reset Tier List',
@@ -151,6 +157,9 @@ export const translations: Record<Language, Translations> = {
       tierListLoadFailed: '加载失败',
       fileReadError: '文件读取错误',
       customizationsSaved: '自定义设置保存成功',
+      autoSaved: '自动保存',
+      characterMoved: (charName: string, tier: string) => `自动保存: ${charName} → ${tier}`,
+      characterRemoved: (charName: string) => `自动保存: 已移除 ${charName}`,
     },
     resetConfirmDialog: {
       title: '重置榜单',

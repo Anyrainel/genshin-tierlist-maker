@@ -1,9 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm install:*)",
-      "Bash(git rm:*)",
-      "Bash(git add:*)"
+      "Bash(npm run build:dev:*)",
+      "Bash(npm run test:run:*)",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": []
